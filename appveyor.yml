@@ -45,14 +45,14 @@ artifacts:
   - path: build\*.nupkg
     name: nuget
 
-for:
+# for:
 
-# Publish pages to github.io only from master
-- branches:
-    only:
-    - master
-  on_success:
-  - ps: .\tools\gh-pages.ps1 -env appveyor
+# # Publish pages to github.io only from master
+# - branches:
+#     only:
+#     - master
+#   on_success:
+#   - ps: .\tools\gh-pages.ps1 -env appveyor
 
 # Only use cache on Windows build
 # (AV caches for each matrix item separately, and the cache is too large)
