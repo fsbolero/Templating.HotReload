@@ -373,7 +373,9 @@ GITHUB
     src/ProvidedTypes.fs (322cbb6be787f6f849ba5d5ff483c8f3639cd15c)
     src/ProvidedTypes.fsi (322cbb6be787f6f849ba5d5ff483c8f3639cd15c)
   remote: fsbolero/bolero
-    tools/Utility.fsx (0a095addb5dcd574ae63b8f04b4ce320c271e092)
+    src/Bolero.Templating.Provider/Parsing.fs (7862fdb1e9f366fec743ef33d705fd9e0cb8f932)
+    src/Bolero.Templating.Provider/Path.fs (7862fdb1e9f366fec743ef33d705fd9e0cb8f932)
+    tools/Utility.fsx (c22196b7fe32d806638bfbaae66f47e049d38aa2)
 GROUP fake
 STORAGE: NONE
 RESTRICTION: == netstandard2.0

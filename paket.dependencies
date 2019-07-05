@@ -13,6 +13,8 @@ nuget TaskBuilder.fs >= 2.1.0 lowest_matching: true
 github fsprojects/FSharp.TypeProviders.SDK src/ProvidedTypes.fsi
 github fsprojects/FSharp.TypeProviders.SDK src/ProvidedTypes.fs
 github fsbolero/bolero tools/Utility.fsx
+github fsbolero/bolero:split-off-hotreload src/Bolero.Templating.Provider/Path.fs
+github fsbolero/bolero:split-off-hotreload src/Bolero.Templating.Provider/Parsing.fs
 nuget Nerdbank.GitVersioning copy_local: true
 
 group fake

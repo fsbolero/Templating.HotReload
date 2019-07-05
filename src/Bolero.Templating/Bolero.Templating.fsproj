@@ -5,8 +5,8 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Path.fs" />
-    <Compile Include="Parsing.fs" />
+    <Compile Include="..\..\paket-files\fsbolero\bolero\src\Bolero.Templating.Provider\Path.fs" Link="Path.fs" />
+    <Compile Include="..\..\paket-files\fsbolero\bolero\src\Bolero.Templating.Provider\Parsing.fs" Link="Parsing.fs" />
     <Compile Include="Settings.fs" />
     <Compile Include="ConvertNode.fs" />
     <Compile Include="Client.fs" />
