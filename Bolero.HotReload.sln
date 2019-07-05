@@ -1,0 +1,67 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29009.5
+MinimumVisualStudioVersion = 15.0.26124.0
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{E6F0FD47-D449-44A6-83A0-FDE7773E3945}"
+	ProjectSection(SolutionItems) = preProject
+		paket.dependencies = paket.dependencies
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{8BE98B06-91C5-4948-B5AA-F80C67849031}"
+EndProject
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Bolero.Templating", "src\Bolero.Templating\Bolero.Templating.fsproj", "{35F2204C-123D-4399-B5F1-5DEAF1F30C24}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B2AD96BA-4DC4-4C14-BB2A-BCBADD0E7527}"
+	ProjectSection(SolutionItems) = preProject
+		build.fsx = build.fsx
+	EndProjectSection
+EndProject
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Bolero.Templating.Server", "src\Bolero.Templating.Server\Bolero.Templating.Server.fsproj", "{262580BD-45C4-4190-A852-59D8720A9EDE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{35F2204C-123D-4399-B5F1-5DEAF1F30C24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35F2204C-123D-4399-B5F1-5DEAF1F30C24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35F2204C-123D-4399-B5F1-5DEAF1F30C24}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{35F2204C-123D-4399-B5F1-5DEAF1F30C24}.Debug|x64.Build.0 = Debug|Any CPU
+		{35F2204C-123D-4399-B5F1-5DEAF1F30C24}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{35F2204C-123D-4399-B5F1-5DEAF1F30C24}.Debug|x86.Build.0 = Debug|Any CPU
+		{35F2204C-123D-4399-B5F1-5DEAF1F30C24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35F2204C-123D-4399-B5F1-5DEAF1F30C24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35F2204C-123D-4399-B5F1-5DEAF1F30C24}.Release|x64.ActiveCfg = Release|Any CPU
+		{35F2204C-123D-4399-B5F1-5DEAF1F30C24}.Release|x64.Build.0 = Release|Any CPU
+		{35F2204C-123D-4399-B5F1-5DEAF1F30C24}.Release|x86.ActiveCfg = Release|Any CPU
+		{35F2204C-123D-4399-B5F1-5DEAF1F30C24}.Release|x86.Build.0 = Release|Any CPU
+		{262580BD-45C4-4190-A852-59D8720A9EDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{262580BD-45C4-4190-A852-59D8720A9EDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{262580BD-45C4-4190-A852-59D8720A9EDE}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{262580BD-45C4-4190-A852-59D8720A9EDE}.Debug|x64.Build.0 = Debug|Any CPU
+		{262580BD-45C4-4190-A852-59D8720A9EDE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{262580BD-45C4-4190-A852-59D8720A9EDE}.Debug|x86.Build.0 = Debug|Any CPU
+		{262580BD-45C4-4190-A852-59D8720A9EDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{262580BD-45C4-4190-A852-59D8720A9EDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{262580BD-45C4-4190-A852-59D8720A9EDE}.Release|x64.ActiveCfg = Release|Any CPU
+		{262580BD-45C4-4190-A852-59D8720A9EDE}.Release|x64.Build.0 = Release|Any CPU
+		{262580BD-45C4-4190-A852-59D8720A9EDE}.Release|x86.ActiveCfg = Release|Any CPU
+		{262580BD-45C4-4190-A852-59D8720A9EDE}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{35F2204C-123D-4399-B5F1-5DEAF1F30C24} = {8BE98B06-91C5-4948-B5AA-F80C67849031}
+		{262580BD-45C4-4190-A852-59D8720A9EDE} = {8BE98B06-91C5-4948-B5AA-F80C67849031}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5493A436-6524-48E0-874D-CD70C1615AAF}
+	EndGlobalSection
+EndGlobal

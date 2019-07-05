@@ -7,4 +7,4 @@ if ! [ -f ".paket/paket$EXE_EXT" ]; then dotnet tool install paket --tool-path .
 if ! [ -f ".paket/fake$EXE_EXT" ]; then dotnet tool install fake-cli --tool-path .paket; fi
 if ! [ -f ".paket/nbgv$EXE_EXT" ]; then dotnet tool install nbgv --tool-path .paket; fi
 
-.paket/fake build "$@"
+.paket/fake run --fsiargs --define:UTILITY_FROM_PAKET build.fsx "$@"
