@@ -138,7 +138,7 @@ module Program =
         | _ ->
             failwith "To use hot reload on the server side, call AddHotReload() in the ASP.NET Core services"
 
-    let withHotReloading (program: Elmish.Program<ProgramComponent<'model, 'msg>, 'model, 'msg, Node>) =
+    let withHotReload (program: Elmish.Program<ProgramComponent<'model, 'msg>, 'model, 'msg, Node>) =
         { program with
             init = fun comp ->
                 let client =
@@ -149,3 +149,7 @@ module Program =
                     | client -> client
                 client.SetOnChange(comp.Rerender)
                 program.init comp }
+
+    [<Obsolete "Use withHotReload instead">]
+    let inline withHotReloading program =
+        withHotReload program

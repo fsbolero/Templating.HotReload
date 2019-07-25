@@ -25,6 +25,7 @@ open System.Threading.Tasks
 open System.Runtime.CompilerServices
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Http
+open Microsoft.AspNetCore.Routing
 open Microsoft.AspNetCore.SignalR
 open Microsoft.Extensions.DependencyInjection
 open Microsoft.Extensions.Hosting
@@ -158,9 +159,16 @@ type ServerTemplatingExtensions =
             .AddTransient<IClient, Client>()
 
     [<Extension>]
+    [<Obsolete "Use endpoints.UseHotReload inside IApplicationBuilder.UseEndpoints instead">]
     static member UseHotReload(this: IApplicationBuilder, ?urlPath: string) : IApplicationBuilder =
         this.ApplicationServices.GetService<Watcher>().Start()
         let urlPath = defaultArg urlPath HotReloadSettings.Default.Url
         this.UseSignalR(fun route ->
             route.MapHub<HotReloadHub>(PathString urlPath)
         )
+
+    [<Extension>]
+    static member UseHotReload(this: IEndpointRouteBuilder, ?urlPath: string) : unit =
+        this.ServiceProvider.GetService<Watcher>().Start()
+        let urlPath = defaultArg urlPath HotReloadSettings.Default.Url
+        this.MapHub<HotReloadHub>(urlPath) |> ignore

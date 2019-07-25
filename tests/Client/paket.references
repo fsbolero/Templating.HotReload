@@ -1,0 +1,5 @@
+Microsoft.AspNetCore.Blazor
+Microsoft.AspNetCore.Blazor.Build
+FSharp.Core
+Elmish
+Bolero

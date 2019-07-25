@@ -60,7 +60,20 @@ Target.create "pack" (fun o ->
     )
 )
 
+Target.description "Run the test project in client-side mode"
+Target.create "run-client" (fun _ ->
+    dotnet "run" "-p tests/Server --bolero:serverside=false"
+)
+
+Target.description "Run the test project in server-side mode"
+Target.create "run-server" (fun _ ->
+    dotnet "run" "-p tests/Server --bolero:serverside=true"
+)
+
 "build"
     ==> "pack"
+
+"build" ==> "run-client"
+"build" ==> "run-server"
 
 Target.runOrDefaultWithArguments "build"
