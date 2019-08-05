@@ -4,9 +4,17 @@ NUGET
   remote: https://api.nuget.org/v3/index.json
     Blazor.Extensions.SignalR (0.2)
       Microsoft.AspNetCore.Components.Browser (>= 3.0.0-preview7.19365.7)
+    Bolero (0.7.8-preview7)
+      Elmish (>= 2.0 < 3.0)
+      FSharp.Core (>= 4.5)
+      Microsoft.AspNetCore.Blazor (3.0.0-preview7.19365.7)
+    Bolero.Server (0.7.8-preview7)
+      Bolero (0.7.8-preview7)
+      FSharp.Core (>= 4.5)
+      TaskBuilder.fs (>= 2.1)
     Elmish (2.0.3)
       FSharp.Core (>= 4.5.2)
-    FSharp.Core (4.7)
+    FSharp.Core (4.5.2)
     HtmlAgilityPack (1.8)
       System.Net.Http (>= 4.3.2)
       System.Xml.XmlDocument (>= 4.3)
@@ -102,7 +110,7 @@ NUGET
       System.Threading (>= 4.3)
     Mono.WebAssembly.Interop (3.0.0-preview7.19362.4)
       Microsoft.JSInterop (>= 3.0.0-preview7.19362.4)
-    Nerdbank.GitVersioning (2.3.183) - copy_local: true
+    Nerdbank.GitVersioning (3.0.24) - copy_local: true
     NETStandard.Library (2.0.3)
       Microsoft.NETCore.Platforms (>= 1.1)
     Newtonsoft.Json (12.0.2) - restriction: || (== netcoreapp3.0) (&& (== netstandard2.0) (>= netcoreapp3.0))
@@ -448,15 +456,6 @@ NUGET
       FSharp.Core (>= 4.1.17)
       NETStandard.Library (>= 1.6.1)
       System.ValueTuple (>= 4.4)
-  remote: https://ci.appveyor.com/nuget/bolero
-    Bolero (0.7.8-preview7)
-      Elmish (>= 2.0 < 3.0)
-      FSharp.Core (>= 4.5)
-      Microsoft.AspNetCore.Blazor (3.0.0-preview7.19365.7)
-    Bolero.Server (0.7.8-preview7)
-      Bolero (0.7.8-preview7)
-      FSharp.Core (>= 4.5)
-      TaskBuilder.fs (>= 2.1)
 GITHUB
   remote: fsprojects/FSharp.TypeProviders.SDK
     src/ProvidedTypes.fs (322cbb6be787f6f849ba5d5ff483c8f3639cd15c)
