@@ -9,9 +9,9 @@ nuget FSharp.Core >= 4.5.2 lowest_matching: true
 nuget Bolero prerelease
 nuget Bolero.Server prerelease
 nuget HtmlAgilityPack >= 1.8.0 lowest_matching: true
-nuget Blazor.Extensions.SignalR >= 0.2 lowest_matching: true
-nuget Microsoft.AspNetCore.Blazor.Build 3.0.0-preview7.19365.7 preview7
-nuget Microsoft.AspNetCore.Blazor.Server 3.0.0-preview7.19365.7 preview7
+nuget Blazor.Extensions.SignalR >= 0.3 lowest_matching: true
+nuget Microsoft.AspNetCore.Blazor.Build 3.0.0-preview8.19405.7 preview8
+nuget Microsoft.AspNetCore.Blazor.Server 3.0.0-preview8.19405.7 preview8
 nuget TaskBuilder.fs >= 2.1.0 lowest_matching: true
 nuget System.Runtime.CompilerServices.Unsafe prerelease
 
