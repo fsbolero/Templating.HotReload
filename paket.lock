@@ -472,21 +472,19 @@ NUGET
       NETStandard.Library (>= 1.6.1)
       System.ValueTuple (>= 4.4)
   remote: https://ci.appveyor.com/nuget/bolero
-    Bolero (0.9.2-preview9.g78779d2)
+    Bolero (0.9.3-preview9)
       Elmish (>= 2.0 < 3.0)
       FSharp.Core (>= 4.5)
       Microsoft.AspNetCore.Blazor (3.0.0-preview9.19465.2)
-      Nerdbank.GitVersioning
-    Bolero.Server (0.9.2-preview9.g78779d2)
-      Bolero (0.9.2-preview9.g78779d2)
+    Bolero.Server (0.9.3-preview9)
+      Bolero (0.9.3-preview9)
       FSharp.Core (>= 4.5)
-      Nerdbank.GitVersioning
       TaskBuilder.fs (>= 2.1)
 GITHUB
   remote: fsbolero/bolero
-    src/Bolero.Templating.Provider/Parsing.fs (479f2e3d079d870db2b94907bdfcd81d25b56127)
-    src/Bolero.Templating.Provider/Path.fs (479f2e3d079d870db2b94907bdfcd81d25b56127)
-    tools/Utility.fsx (479f2e3d079d870db2b94907bdfcd81d25b56127)
+    src/Bolero.Templating.Provider/Parsing.fs (697724668d04bd317d29a341dd2d4079416f414a)
+    src/Bolero.Templating.Provider/Path.fs (697724668d04bd317d29a341dd2d4079416f414a)
+    tools/Utility.fsx (697724668d04bd317d29a341dd2d4079416f414a)
 GROUP fake
 STORAGE: NONE
 RESTRICTION: == netstandard2.0

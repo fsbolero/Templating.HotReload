@@ -6,3 +6,5 @@ authors
     Loic Denuziere
 include-referenced-projects true
 interproject-references fix
+excludeddependencies
+    nerdbank.gitversioning
