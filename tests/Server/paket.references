@@ -1,3 +1,4 @@
 Microsoft.AspNetCore.Blazor.Server
 FSharp.Core
 Bolero.Server
+Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation

@@ -25,7 +25,6 @@ open Microsoft.AspNetCore
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.Configuration
-open Microsoft.Extensions.Logging
 open Microsoft.Extensions.DependencyInjection
 open Bolero.Templating.Server
 open Bolero.Test
@@ -34,32 +33,28 @@ type Startup(config: IConfiguration) =
     let serverSide = config.GetValue("bolero:serverside", false)
 
     member this.ConfigureServices(services: IServiceCollection) =
-        if serverSide then
-            services.AddServerSideBlazor() |> ignore
-        else
-            services.AddMvcCore() |> ignore
-
+        services.AddMvc().AddRazorRuntimeCompilation() |> ignore
+        services.AddServerSideBlazor() |> ignore
         services
             .AddHotReload(__SOURCE_DIRECTORY__ + "/../Client")
             .AddSingleton<HtmlEncoder>(HtmlEncoder.Default)
         |> ignore
 
     member this.Configure(app: IApplicationBuilder) =
-        if serverSide then
-            app.UseStaticFiles() |> ignore
-        else
-            app.UseClientSideBlazorFiles<Client.Startup>() |> ignore
+        app.UseStaticFiles()
+            .UseRouting()
+            |> ignore
 
-        app .UseRouting()
-            .UseEndpoints(fun endpoints ->
-                endpoints.UseHotReload()
-                if serverSide then
-                    endpoints.MapBlazorHub<Client.Main.MyApp>("#main") |> ignore
-                    endpoints.MapFallbackToFile("index.html") |> ignore
-                else
+        if serverSide then
+            app.UseEndpoints(fun endpoints ->
+                    endpoints.UseHotReload()
+                    endpoints.MapBlazorHub() |> ignore
+                    endpoints.MapFallbackToPage("/_Host") |> ignore)
+        else
+            app.UseClientSideBlazorFiles<Client.Startup>()
+                .UseEndpoints(fun endpoints ->
                     endpoints.MapDefaultControllerRoute() |> ignore
-                    endpoints.MapFallbackToClientSideBlazor<Client.Startup>("index.html") |> ignore
-            )
+                    endpoints.MapFallbackToClientSideBlazor<Client.Startup>("index.html") |> ignore)
         |> ignore
 
 module Program =

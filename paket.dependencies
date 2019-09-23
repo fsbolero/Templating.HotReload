@@ -9,15 +9,14 @@ nuget FSharp.Core >= 4.5.2 lowest_matching: true
 nuget Bolero prerelease
 nuget Bolero.Server prerelease
 nuget HtmlAgilityPack >= 1.8.0 lowest_matching: true
-nuget Blazor.Extensions.SignalR >= 0.3 lowest_matching: true
-nuget Microsoft.AspNetCore.Blazor.Build 3.0.0-preview8.19405.7 preview8
-nuget Microsoft.AspNetCore.Blazor.Server 3.0.0-preview8.19405.7 preview8
+nuget Blazor.Extensions.SignalR >= 0.4 lowest_matching: true
+nuget Microsoft.AspNetCore.Blazor.Build 3.0.0-preview9.19465.2
+nuget Microsoft.AspNetCore.Blazor.Server 3.0.0-preview9.19465.2
+nuget Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation >= 3.0.0
 nuget TaskBuilder.fs >= 2.1.0 lowest_matching: true
-nuget System.Runtime.CompilerServices.Unsafe ~> 4.6.0-preview8.19405.3 preview8
+nuget System.Runtime.CompilerServices.Unsafe ~> 4.6.0
 
 # Build and test references
-github fsprojects/FSharp.TypeProviders.SDK src/ProvidedTypes.fsi
-github fsprojects/FSharp.TypeProviders.SDK src/ProvidedTypes.fs
 github fsbolero/bolero tools/Utility.fsx
 github fsbolero/bolero src/Bolero.Templating.Provider/Path.fs
 github fsbolero/bolero src/Bolero.Templating.Provider/Parsing.fs
@@ -28,7 +27,6 @@ source https://api.nuget.org/v3/index.json
 storage: none
 framework: netstandard2.0
 
-nuget FSharp.Core ~> 4.5.0
 nuget Fake.Core.Target
 nuget Fake.IO.FileSystem
 nuget Fake.DotNet.AssemblyInfoFile

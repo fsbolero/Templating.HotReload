@@ -95,7 +95,7 @@ type SignalRClient(settings: HotReloadSettings, runtime: IJSRuntime) as this =
         let mutable connected = false
         while not connected do
             try
-                do! hub.StartAsync() |> Async.AwaitTask
+                let! _ = hub.StartAsync().AsTask() |> Async.AwaitTask
                 connected <- true
             with _ ->
                 do! Async.Sleep settings.ReconnectDelayInMs
@@ -111,12 +111,13 @@ type SignalRClient(settings: HotReloadSettings, runtime: IJSRuntime) as this =
         setupHandlers()
         connect |> Async.Start
 
-    override this.RequestFile(filename) =
-        hub.InvokeAsync<string>("RequestFile", filename).ContinueWith(fun (t: Task<_>) ->
-            if t.IsCompleted then this.StoreFileContent(filename, t.Result)
-            elif t.IsFaulted then printfn "Hot reload failed to request file: %A" t.Exception
-        )
-        |> Async.AwaitTask
+    override this.RequestFile(filename) = async {
+        try
+            let! content = hub.InvokeAsync<string>("RequestFile", filename).AsTask() |> Async.AwaitTask
+            return this.StoreFileContent(filename, content)
+        with exn ->
+            printfn "Hot reload failed to request file: %A" exn
+    }
 
     override this.SetOnChange(callback) =
         rerender <- callback
@@ -129,7 +130,7 @@ module Program =
             let settings =
                 let s = comp.Services.GetService<HotReloadSettings>()
                 if obj.ReferenceEquals(s, null) then HotReloadSettings.Default else s
-            let baseUri = comp.Services.GetService<IUriHelper>().GetBaseUri()
+            let baseUri = comp.Services.GetService<NavigationManager>().BaseUri
             let url = UriBuilder(baseUri, Scheme = "ws", Path = settings.Url).ToString()
             let settings = { settings with Url = url }
             let client = new SignalRClient(settings, runtime)
