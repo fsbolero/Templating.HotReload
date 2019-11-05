@@ -53,6 +53,7 @@ type Startup(config: IConfiguration) =
         else
             app.UseClientSideBlazorFiles<Client.Startup>()
                 .UseEndpoints(fun endpoints ->
+                    endpoints.UseHotReload()
                     endpoints.MapDefaultControllerRoute() |> ignore
                     endpoints.MapFallbackToClientSideBlazor<Client.Startup>("index.html") |> ignore)
         |> ignore

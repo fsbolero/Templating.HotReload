@@ -33,10 +33,7 @@ open Utility
 
 let config = getArg "-c" "Debug"
 let version = getArgOpt "-v" >> Option.defaultWith (fun () ->
-    CreateProcess.fromRawCommand ".paket/nbgv" ["get-version"; "-v"; "SemVer2"]
-    |> CreateProcess.redirectOutput
-    |> Proc.run
-    |> fun r -> r.Result.Output.Trim()
+    dotnetOutput "nbgv" "get-version -v SemVer2"
 )
 let verbosity = getFlag "--verbose" >> function
     | true -> "n"
@@ -51,11 +48,11 @@ Target.create "build" (fun o ->
 
 Target.description "Create the NuGet packages"
 Target.create "pack" (fun o ->
-    Fake.DotNet.Paket.pack (fun p ->
+    Paket.pack (fun p ->
         { p with
             OutputPath = "build"
             Version = version o
-            ToolPath = ".paket/paket"
+            ToolType = ToolType.CreateLocalTool()
         }
     )
 )
