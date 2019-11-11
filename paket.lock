@@ -4,6 +4,14 @@ NUGET
   remote: https://api.nuget.org/v3/index.json
     Blazor.Extensions.SignalR (0.4)
       Microsoft.AspNetCore.Components.Web (>= 3.0.0-preview9.19424.4)
+    Bolero (0.10.1-preview9)
+      Elmish (>= 2.0 < 3.0)
+      FSharp.Core (>= 4.5)
+      Microsoft.AspNetCore.Blazor (3.0.0-preview9.19465.2)
+    Bolero.Server (0.10.1-preview9)
+      Bolero (0.10.1-preview9)
+      FSharp.Core (>= 4.5)
+      TaskBuilder.fs (>= 2.1)
     Elmish (2.0.3)
       FSharp.Core (>= 4.5.2)
     FSharp.Core (4.5.2)
@@ -471,15 +479,6 @@ NUGET
       FSharp.Core (>= 4.1.17)
       NETStandard.Library (>= 1.6.1)
       System.ValueTuple (>= 4.4)
-  remote: https://ci.appveyor.com/nuget/bolero
-    Bolero (0.10.1-preview9)
-      Elmish (>= 2.0 < 3.0)
-      FSharp.Core (>= 4.5)
-      Microsoft.AspNetCore.Blazor (3.0.0-preview9.19465.2)
-    Bolero.Server (0.10.1-preview9)
-      Bolero (0.10.1-preview9)
-      FSharp.Core (>= 4.5)
-      TaskBuilder.fs (>= 2.1)
 GITHUB
   remote: fsbolero/bolero
     src/Bolero.Templating.Provider/Parsing.fs (672760939af1414d99dccb3d1a403aeeb6f708ee)
