@@ -24,12 +24,10 @@ type HotReloadSettings =
     {
         Url: string
         ReconnectDelayInMs: int
-        LogLevel: Blazor.Extensions.SignalRLogLevel
     }
 
     static member Default =
         {
             Url = "/bolero-reload"
             ReconnectDelayInMs = 5000
-            LogLevel = Blazor.Extensions.SignalRLogLevel.Information
         }

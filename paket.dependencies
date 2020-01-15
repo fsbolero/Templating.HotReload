@@ -1,25 +1,27 @@
 source https://api.nuget.org/v3/index.json
 source https://ci.appveyor.com/nuget/bolero
 storage: none
-framework: netstandard2.0, netcoreapp3.1
+framework: auto-detect
+lowest_matching: true
 
 # Project references
-nuget FSharp.Core >= 4.5.2 lowest_matching: true
-nuget Bolero prerelease
-nuget Bolero.Server prerelease
-nuget HtmlAgilityPack >= 1.8.0 lowest_matching: true
-nuget Blazor.Extensions.SignalR >= 0.4 lowest_matching: true
-nuget Microsoft.AspNetCore.Blazor.Build 3.1-preview3.19555.2
-nuget Microsoft.AspNetCore.Blazor.Server 3.1-preview3.19555.2
-nuget Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation >= 3.1.0
-nuget TaskBuilder.fs >= 2.1.0 lowest_matching: true
+nuget FSharp.Core >= 4.7.0
+nuget Bolero prerelease lowest_matching: false
+nuget Bolero.Server prerelease lowest_matching: false
+nuget HtmlAgilityPack >= 1.8.0
+nuget Microsoft.AspNetCore.Components.Web ~> 3.1.0
+nuget Microsoft.AspNetCore.Blazor.Build 3.1-preview4.19579.2
+nuget Microsoft.AspNetCore.Blazor.Server 3.1-preview4.19579.2
+nuget Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation ~> 3.1.0
+nuget TaskBuilder.fs >= 2.1.0
 nuget System.Runtime.CompilerServices.Unsafe ~> 4.7.0
+nuget BlazorSignalR >= 0.12.0-blazor-3.1.0-preview3.19555.2 prerelease
 
 # Build and test references
 github fsbolero/bolero tools/Utility.fsx
 github fsbolero/bolero src/Bolero.Templating.Provider/Path.fs
 github fsbolero/bolero src/Bolero.Templating.Provider/Parsing.fs
-nuget Nerdbank.GitVersioning copy_local: true
+nuget Nerdbank.GitVersioning copy_local: true, lowest_matching: false
 
 group fake
 source https://api.nuget.org/v3/index.json

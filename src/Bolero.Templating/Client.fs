@@ -26,10 +26,12 @@ open System.Threading.Tasks
 open Microsoft.Extensions.DependencyInjection
 open Microsoft.JSInterop
 open Microsoft.AspNetCore.Components
-open Blazor.Extensions
+open BlazorSignalR
 open Bolero
 open Bolero.Templating
 open Bolero.TemplatingInternals
+open Microsoft.AspNetCore.SignalR.Client
+open Microsoft.AspNetCore.Http.Connections
 
 [<AbstractClass>]
 type ClientBase() =
@@ -71,15 +73,13 @@ type ClientBase() =
         member this.FileChanged(filename, content) =
             this.StoreFileContent(filename, content)
 
-type SignalRClient(settings: HotReloadSettings, runtime: IJSRuntime) as this =
+type SignalRClient(settings: HotReloadSettings, runtime: IJSRuntime, nav: NavigationManager) as this =
     inherit ClientBase()
 
     let hub =
-        HubConnectionBuilder(runtime)
-            .WithUrl(settings.Url, fun opt ->
-                opt.Transport <- HttpTransportType.WebSockets
-                opt.SkipNegotiation <- true
-                opt.LogLevel <- settings.LogLevel)
+        HubConnectionBuilder()
+            .WithUrlBlazor(settings.Url, runtime, nav,
+                transports = Nullable HttpTransportType.LongPolling)
             .Build()
 
     let mutable rerender = ignore
@@ -95,7 +95,7 @@ type SignalRClient(settings: HotReloadSettings, runtime: IJSRuntime) as this =
         let mutable connected = false
         while not connected do
             try
-                let! _ = hub.StartAsync().AsTask() |> Async.AwaitTask
+                let! _ = hub.StartAsync() |> Async.AwaitTask
                 connected <- true
             with _ ->
                 do! Async.Sleep settings.ReconnectDelayInMs
@@ -105,7 +105,7 @@ type SignalRClient(settings: HotReloadSettings, runtime: IJSRuntime) as this =
         rerender()
     }
 
-    do  hub.OnClose(fun _ ->
+    do  hub.add_Closed(fun _ ->
             printfn "Hot reload disconnected!"
             connect |> Async.StartAsTask :> Task)
         setupHandlers()
@@ -113,7 +113,7 @@ type SignalRClient(settings: HotReloadSettings, runtime: IJSRuntime) as this =
 
     override this.RequestFile(filename) = async {
         try
-            let! content = hub.InvokeAsync<string>("RequestFile", filename).AsTask() |> Async.AwaitTask
+            let! content = hub.InvokeAsync<string>("RequestFile", filename) |> Async.AwaitTask
             return this.StoreFileContent(filename, content)
         with exn ->
             printfn "Hot reload failed to request file: %A" exn
@@ -130,10 +130,7 @@ module Program =
             let settings =
                 let s = comp.Services.GetService<HotReloadSettings>()
                 if obj.ReferenceEquals(s, null) then HotReloadSettings.Default else s
-            let baseUri = comp.Services.GetService<NavigationManager>().BaseUri
-            let url = UriBuilder(baseUri, Scheme = "ws", Path = settings.Url).ToString()
-            let settings = { settings with Url = url }
-            let client = new SignalRClient(settings, runtime)
+            let client = new SignalRClient(settings, runtime, comp.NavigationManager)
             TemplateCache.client <- client
             client :> IClient
         | _ ->
