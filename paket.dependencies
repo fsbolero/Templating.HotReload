@@ -2,24 +2,18 @@ source https://api.nuget.org/v3/index.json
 source https://ci.appveyor.com/nuget/bolero
 storage: none
 framework: auto-detect
-lowest_matching: true
-strategy: min
+# lowest_matching: true
+# strategy: min
 
 # Project references
 nuget FSharp.Core >= 4.7.0
 nuget Bolero prerelease lowest_matching: false
 nuget Bolero.Server prerelease lowest_matching: false
+nuget Microsoft.AspNetCore.Components.WebAssembly.Build 3.2.0-preview2.20160.5
+nuget Microsoft.AspNetCore.Components.WebAssembly.Server 3.2.0-preview2.20160.5 copy_local: true
+nuget Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation >= 3.1.0
+nuget Microsoft.AspNetCore.SignalR.Client >= 3.1.0
 nuget HtmlAgilityPack >= 1.8.0
-nuget Microsoft.AspNetCore.Components.Web ~> 3.1.0
-nuget Microsoft.AspNetCore.Blazor.Build 3.1-preview4.19579.2
-nuget Microsoft.AspNetCore.Blazor.Server 3.1-preview4.19579.2
-nuget Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation ~> 3.1.0
-nuget Microsoft.AspNetCore.SignalR.Client.Core ~> 3.1.0
-nuget Microsoft.NETCore.Platforms 3.1
-nuget TaskBuilder.fs >= 2.1.0
-nuget System.Runtime.CompilerServices.Unsafe ~> 4.7.0
-nuget System.Threading.Tasks.Extensions >= 4.5.3
-nuget BlazorSignalR >= 0.12.0-blazor-3.1.0-preview3.19555.2 prerelease
 
 # Build and test references
 github fsbolero/bolero tools/Utility.fsx

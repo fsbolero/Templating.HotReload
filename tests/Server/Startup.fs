@@ -27,7 +27,6 @@ open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.Configuration
 open Microsoft.Extensions.DependencyInjection
 open Bolero.Templating.Server
-open Bolero.Test
 
 type Startup(config: IConfiguration) =
     let serverSide = config.GetValue("bolero:serverside", false)
@@ -51,11 +50,11 @@ type Startup(config: IConfiguration) =
                     endpoints.MapBlazorHub() |> ignore
                     endpoints.MapFallbackToPage("/_Host") |> ignore)
         else
-            app.UseClientSideBlazorFiles<Client.Startup>()
+            app.UseBlazorFrameworkFiles()
                 .UseEndpoints(fun endpoints ->
                     endpoints.UseHotReload()
                     endpoints.MapDefaultControllerRoute() |> ignore
-                    endpoints.MapFallbackToClientSideBlazor<Client.Startup>("index.html") |> ignore)
+                    endpoints.MapFallbackToFile("index.html") |> ignore)
         |> ignore
 
 module Program =
