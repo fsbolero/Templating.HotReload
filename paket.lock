@@ -2,18 +2,18 @@ STORAGE: NONE
 RESTRICTION: || (== netcoreapp3.1) (== netstandard2.1)
 NUGET
   remote: https://ci.appveyor.com/nuget/bolero
-    Bolero (0.12.8-preview32.g2e58030)
+    Bolero (0.12.11-preview32)
       Elmish (>= 2.0 < 3.0)
       FSharp.Core (>= 4.5)
       Microsoft.AspNetCore.Components.WebAssembly (3.2.0-preview2.20160.5)
-    Bolero.Server (0.12.8-preview32.g2e58030)
-      Bolero (0.12.8-preview32.g2e58030)
+    Bolero.Server (0.12.11-preview32)
+      Bolero (0.12.11-preview32)
       FSharp.Core (>= 4.5)
       TaskBuilder.fs (>= 2.1)
   remote: https://api.nuget.org/v3/index.json
     Elmish (2.0.3)
       FSharp.Core (>= 4.5.2)
-    FSharp.Core (4.7)
+    FSharp.Core (4.7.1)
     HtmlAgilityPack (1.11.22)
       System.Net.Http (>= 4.3.2)
       System.Xml.XmlDocument (>= 4.3)
@@ -84,17 +84,17 @@ NUGET
       System.Text.Json (>= 4.7.1) - restriction: == netstandard2.1
     Microsoft.AspNetCore.SignalR.Protocols.Json (3.1.2)
       Microsoft.AspNetCore.SignalR.Common (>= 3.1.2)
-    Microsoft.CodeAnalysis.Analyzers (2.9.8) - restriction: || (== netcoreapp3.1) (&& (== netstandard2.1) (>= netcoreapp3.1))
-    Microsoft.CodeAnalysis.Common (3.4) - restriction: || (== netcoreapp3.1) (&& (== netstandard2.1) (>= netcoreapp3.1))
-      Microsoft.CodeAnalysis.Analyzers (>= 2.9.6)
+    Microsoft.CodeAnalysis.Analyzers (3.0.0-beta2.20059.3) - restriction: || (== netcoreapp3.1) (&& (== netstandard2.1) (>= netcoreapp3.1))
+    Microsoft.CodeAnalysis.Common (3.5) - restriction: || (== netcoreapp3.1) (&& (== netstandard2.1) (>= netcoreapp3.1))
+      Microsoft.CodeAnalysis.Analyzers (>= 3.0.0-beta2.20059.3)
       System.Collections.Immutable (>= 1.5)
       System.Memory (>= 4.5.3)
       System.Reflection.Metadata (>= 1.6)
-      System.Runtime.CompilerServices.Unsafe (>= 4.5.2)
+      System.Runtime.CompilerServices.Unsafe (>= 4.6)
       System.Text.Encoding.CodePages (>= 4.5.1)
       System.Threading.Tasks.Extensions (>= 4.5.3)
-    Microsoft.CodeAnalysis.CSharp (3.4) - restriction: || (== netcoreapp3.1) (&& (== netstandard2.1) (>= netcoreapp3.1))
-      Microsoft.CodeAnalysis.Common (3.4)
+    Microsoft.CodeAnalysis.CSharp (3.5) - restriction: || (== netcoreapp3.1) (&& (== netstandard2.1) (>= netcoreapp3.1))
+      Microsoft.CodeAnalysis.Common (3.5)
     Microsoft.CodeAnalysis.Razor (3.1.2) - restriction: || (== netcoreapp3.1) (&& (== netstandard2.1) (>= netcoreapp3.1))
       Microsoft.AspNetCore.Razor.Language (>= 3.1.2)
       Microsoft.CodeAnalysis.Common (>= 3.3)
@@ -481,9 +481,9 @@ NUGET
       System.ValueTuple (>= 4.4)
 GITHUB
   remote: fsbolero/bolero
-    src/Bolero.Templating.Provider/Parsing.fs (ffba0e63ee8b1e710aff2e10ff1f4ff63d2628e5)
-    src/Bolero.Templating.Provider/Path.fs (ffba0e63ee8b1e710aff2e10ff1f4ff63d2628e5)
-    tools/Utility.fsx (ffba0e63ee8b1e710aff2e10ff1f4ff63d2628e5)
+    src/Bolero.Templating.Provider/Parsing.fs (e2f9977a377d3a022b5528eae0a24741e2e3042f)
+    src/Bolero.Templating.Provider/Path.fs (e2f9977a377d3a022b5528eae0a24741e2e3042f)
+    tools/Utility.fsx (e2f9977a377d3a022b5528eae0a24741e2e3042f)
 GROUP fake
 STORAGE: NONE
 RESTRICTION: == netstandard2.0
