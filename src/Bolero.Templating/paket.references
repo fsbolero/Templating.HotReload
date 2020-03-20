@@ -2,4 +2,4 @@ FSharp.Core
 Bolero
 HtmlAgilityPack
 Nerdbank.GitVersioning
-BlazorSignalR
+Microsoft.AspNetCore.SignalR.Client

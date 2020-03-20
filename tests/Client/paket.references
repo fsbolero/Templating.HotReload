@@ -1,5 +1,5 @@
-Microsoft.AspNetCore.Blazor
-Microsoft.AspNetCore.Blazor.Build
+Microsoft.AspNetCore.Components.WebAssembly
+Microsoft.AspNetCore.Components.WebAssembly.Build
 FSharp.Core
 Elmish
 Bolero

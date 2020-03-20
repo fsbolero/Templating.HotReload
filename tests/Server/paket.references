@@ -1,4 +1,4 @@
-Microsoft.AspNetCore.Blazor.Server
+Microsoft.AspNetCore.Components.WebAssembly.Server
 FSharp.Core
 Bolero.Server
 Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation

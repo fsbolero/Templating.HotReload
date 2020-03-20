@@ -26,7 +26,6 @@ open System.Threading.Tasks
 open Microsoft.Extensions.DependencyInjection
 open Microsoft.JSInterop
 open Microsoft.AspNetCore.Components
-open BlazorSignalR
 open Bolero
 open Bolero.Templating
 open Bolero.TemplatingInternals
@@ -73,13 +72,12 @@ type ClientBase() =
         member this.FileChanged(filename, content) =
             this.StoreFileContent(filename, content)
 
-type SignalRClient(settings: HotReloadSettings, runtime: IJSRuntime, nav: NavigationManager) as this =
+type SignalRClient(settings: HotReloadSettings, nav: NavigationManager) as this =
     inherit ClientBase()
 
     let hub =
         HubConnectionBuilder()
-            .WithUrlBlazor(settings.Url, runtime, nav,
-                transports = Nullable HttpTransportType.LongPolling)
+            .WithUrl(nav.ToAbsoluteUri(settings.Url))
             .Build()
 
     let mutable rerender = ignore
@@ -100,7 +98,7 @@ type SignalRClient(settings: HotReloadSettings, runtime: IJSRuntime, nav: Naviga
             with _ ->
                 do! Async.Sleep settings.ReconnectDelayInMs
                 printfn "Hot reload reconnecting..."
-        printfn "Connected!"
+        printfn "Hot reload connected!"
         do! this.RefreshAllFiles()
         rerender()
     }
@@ -125,16 +123,12 @@ type SignalRClient(settings: HotReloadSettings, runtime: IJSRuntime, nav: Naviga
 module Program =
 
     let private registerClient (comp: ProgramComponent<_, _>) =
-        match comp.JSRuntime with
-        | :? IJSInProcessRuntime as runtime ->
-            let settings =
-                let s = comp.Services.GetService<HotReloadSettings>()
-                if obj.ReferenceEquals(s, null) then HotReloadSettings.Default else s
-            let client = new SignalRClient(settings, runtime, comp.NavigationManager)
-            TemplateCache.client <- client
-            client :> IClient
-        | _ ->
-            failwith "To use hot reload on the server side, call AddHotReload() in the ASP.NET Core services"
+        let settings =
+            let s = comp.Services.GetService<HotReloadSettings>()
+            if obj.ReferenceEquals(s, null) then HotReloadSettings.Default else s
+        let client = new SignalRClient(settings, comp.NavigationManager)
+        TemplateCache.client <- client
+        client :> IClient
 
     let withHotReload (program: Elmish.Program<ProgramComponent<'model, 'msg>, 'model, 'msg, Node>) =
         { program with
