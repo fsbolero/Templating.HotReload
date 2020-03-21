@@ -2,16 +2,14 @@ source https://api.nuget.org/v3/index.json
 source https://ci.appveyor.com/nuget/bolero
 storage: none
 framework: auto-detect
-# lowest_matching: true
-# strategy: min
 
 # Project references
-nuget FSharp.Core >= 4.7.0
-nuget Bolero prerelease lowest_matching: false
-nuget Bolero.Server prerelease lowest_matching: false
+nuget FSharp.Core >= 4.5.2 lowest_matching: true
+nuget Bolero prerelease
+nuget Bolero.Server prerelease
 nuget Microsoft.AspNetCore.Components.WebAssembly.Build 3.2.0-preview2.20160.5
 nuget Microsoft.AspNetCore.Components.WebAssembly.Server 3.2.0-preview2.20160.5 copy_local: true
-nuget Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation >= 3.1.0
+nuget Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation >= 3.1.2
 nuget Microsoft.AspNetCore.SignalR.Client >= 3.1.0
 nuget HtmlAgilityPack >= 1.8.0
 
@@ -19,7 +17,7 @@ nuget HtmlAgilityPack >= 1.8.0
 github fsbolero/bolero tools/Utility.fsx
 github fsbolero/bolero src/Bolero.Templating.Provider/Path.fs
 github fsbolero/bolero src/Bolero.Templating.Provider/Parsing.fs
-nuget Nerdbank.GitVersioning copy_local: true, lowest_matching: false
+nuget Nerdbank.GitVersioning copy_local: true
 
 group fake
 source https://api.nuget.org/v3/index.json
