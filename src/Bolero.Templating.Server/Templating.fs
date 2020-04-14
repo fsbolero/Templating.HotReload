@@ -20,6 +20,7 @@
 namespace Bolero.Templating.Server
 
 open System
+open System.Collections.Concurrent
 open System.IO
 open System.Threading.Tasks
 open System.Runtime.CompilerServices
@@ -51,6 +52,7 @@ module Impl =
     type WatcherConfig =
         {
             dir: option<string>
+            delayInMs: float
         }
 
     type HotReloadHub(watcher: Watcher) =
@@ -97,18 +99,35 @@ module Impl =
                         |> Async.AwaitTask
             }
 
+        let delayedOnchange =
+            let cache = ConcurrentDictionary<string, Timers.Timer>()
+            fun (fullPath: string) ->
+                cache.AddOrUpdate(fullPath,
+                    (fun _ ->
+                        let t = new Timers.Timer(config.delayInMs, AutoReset = false)
+                        t.Elapsed.Add(fun _ ->
+                            Async.StartImmediate (onchange fullPath)
+                            cache.TryRemove(fullPath) |> ignore)
+                        t.Start()
+                        t),
+                    (fun _ t ->
+                        t.Stop()
+                        t.Start()
+                        t))
+                |> ignore
+
         let callback (args: FileSystemEventArgs) =
-            Async.StartImmediate <| onchange args.FullPath
+            delayedOnchange args.FullPath
 
-        member this.Changed = changed.Publish
+        member _.Changed = changed.Publish
 
-        member this.FullPathOf(filename) =
+        member _.FullPathOf(filename) =
             fullPathOf filename
 
-        member this.GetFileContent(fullPath) =
+        member _.GetFileContent(fullPath) =
             getFileContent fullPath
 
-        member this.Start() =
+        member _.Start() =
             let fsw =
                 new FileSystemWatcher(dir, "*.html",
                     IncludeSubdirectories = true,
@@ -130,21 +149,21 @@ module Impl =
 
         interface IClient with
 
-            member this.RequestTemplate(filename, subtemplate) =
+            member _.RequestTemplate(filename, subtemplate) =
                 TemplateCache.client.RequestTemplate(filename, subtemplate)
 
-            member this.SetOnChange(callback) =
+            member _.SetOnChange(callback) =
                 watcher.Changed.Subscribe(fun (filename, content) ->
                     TemplateCache.client.FileChanged(filename, content)
                     callback())
                 |> handlers.Add
 
-            member this.FileChanged(filename, content) =
+            member _.FileChanged(filename, content) =
                 TemplateCache.client.FileChanged(filename, content)
 
         interface IDisposable with
 
-            member this.Dispose() =
+            member _.Dispose() =
                 for handler in handlers do
                     handler.Dispose()
 
@@ -152,11 +171,16 @@ module Impl =
 type ServerTemplatingExtensions =
 
     [<Extension>]
-    static member AddHotReload(this: IServiceCollection, ?templateDir: string) : IServiceCollection =
+    static member AddHotReload(this: IServiceCollection, config: WatcherConfig) : IServiceCollection =
         this.AddSignalR().AddJsonProtocol() |> ignore
-        this.AddSingleton({ dir = templateDir })
+        this.AddSingleton(config)
             .AddSingleton<Watcher>()
             .AddTransient<IClient, Client>()
+
+    [<Extension>]
+    static member AddHotReload(this: IServiceCollection, ?templateDir: string, ?delayInMs: float) : IServiceCollection =
+        let config = { dir = templateDir; delayInMs = defaultArg delayInMs 100. }
+        ServerTemplatingExtensions.AddHotReload(this, config)
 
     [<Extension>]
     [<Obsolete "Use endpoints.UseHotReload inside IApplicationBuilder.UseEndpoints instead">]

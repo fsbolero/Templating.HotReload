@@ -9,3 +9,4 @@ build/
 TestResults/
 .paket/
 src/Bolero.Templating/content/
+.ionide
