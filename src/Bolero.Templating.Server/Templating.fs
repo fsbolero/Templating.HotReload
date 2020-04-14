@@ -34,8 +34,19 @@ open Microsoft.Extensions.Logging
 open Bolero.Templating
 open Bolero.TemplatingInternals
 
+type WatcherConfig =
+    {
+        /// The directory containing the template files to reload on change.
+        /// All files with extension .html in this directory and its subdirectories are watched.
+        Directory: string
+        /// The delay to wait when a change happens before triggering a reload.
+        /// The default is 100 milliseconds; try increasing it if you experience issues
+        /// such as file locks when saving template files.
+        Delay: TimeSpan
+    }
+
 [<AutoOpen>]
-module Impl =
+module internal Impl =
 
     let rec asyncRetry (times: int) (job: Async<'T>) : Async<option<'T>> = async {
         try
@@ -49,11 +60,22 @@ module Impl =
                 return! asyncRetry (times - 1) job
     }
 
-    type WatcherConfig =
-        {
-            dir: option<string>
-            delayInMs: float
-        }
+    let delayed (delay: TimeSpan) (callback: 'K -> unit) =
+        let cache = ConcurrentDictionary<'K, Timers.Timer>()
+        fun (key: 'K) ->
+            cache.AddOrUpdate(key,
+                (fun _ ->
+                    let t = new Timers.Timer(delay.TotalMilliseconds, AutoReset = false)
+                    t.Elapsed.Add(fun _ ->
+                        callback key
+                        cache.TryRemove(key) |> ignore)
+                    t.Start()
+                    t),
+                (fun _ t ->
+                    t.Stop()
+                    t.Start()
+                    t))
+            |> ignore
 
     type HotReloadHub(watcher: Watcher) =
         inherit Hub()
@@ -69,9 +91,7 @@ module Impl =
 
     and Watcher(config: WatcherConfig, env: IHostEnvironment, log: ILogger<Watcher>, hub: IHubContext<HotReloadHub>) =
         let dir =
-            match config.dir with
-            | Some dir -> Path.Combine(env.ContentRootPath, dir)
-            | None -> env.ContentRootPath
+            Path.Combine(env.ContentRootPath, config.Directory)
             |> Path.Canonicalize
 
         let fullPathOf filename =
@@ -99,22 +119,7 @@ module Impl =
                         |> Async.AwaitTask
             }
 
-        let delayedOnchange =
-            let cache = ConcurrentDictionary<string, Timers.Timer>()
-            fun (fullPath: string) ->
-                cache.AddOrUpdate(fullPath,
-                    (fun _ ->
-                        let t = new Timers.Timer(config.delayInMs, AutoReset = false)
-                        t.Elapsed.Add(fun _ ->
-                            Async.StartImmediate (onchange fullPath)
-                            cache.TryRemove(fullPath) |> ignore)
-                        t.Start()
-                        t),
-                    (fun _ t ->
-                        t.Stop()
-                        t.Start()
-                        t))
-                |> ignore
+        let delayedOnchange = delayed config.Delay (Async.StartImmediate << onchange)
 
         let callback (args: FileSystemEventArgs) =
             delayedOnchange args.FullPath
@@ -171,16 +176,20 @@ module Impl =
 type ServerTemplatingExtensions =
 
     [<Extension>]
-    static member AddHotReload(this: IServiceCollection, config: WatcherConfig) : IServiceCollection =
+    static member AddHotReload(this: IServiceCollection, configure: WatcherConfig -> WatcherConfig) : IServiceCollection =
         this.AddSignalR().AddJsonProtocol() |> ignore
+        let config = configure { Directory = "."; Delay = TimeSpan.FromMilliseconds 100. }
         this.AddSingleton(config)
             .AddSingleton<Watcher>()
             .AddTransient<IClient, Client>()
 
     [<Extension>]
-    static member AddHotReload(this: IServiceCollection, ?templateDir: string, ?delayInMs: float) : IServiceCollection =
-        let config = { dir = templateDir; delayInMs = defaultArg delayInMs 100. }
-        ServerTemplatingExtensions.AddHotReload(this, config)
+    static member AddHotReload(this: IServiceCollection, ?templateDir: string, ?delay: TimeSpan) : IServiceCollection =
+        ServerTemplatingExtensions.AddHotReload(this, fun config ->
+            {
+                Directory = defaultArg templateDir config.Directory
+                Delay = defaultArg delay config.Delay
+            })
 
     [<Extension>]
     [<Obsolete "Use endpoints.UseHotReload inside IApplicationBuilder.UseEndpoints instead">]
