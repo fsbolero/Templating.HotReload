@@ -8,3 +8,5 @@ include-referenced-projects true
 interproject-references fix
 excludeddependencies
     nerdbank.gitversioning
+dependencies
+    Bolero >= LOCKEDVERSION

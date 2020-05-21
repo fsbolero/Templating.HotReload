@@ -5,8 +5,8 @@ framework: auto-detect
 
 # Project references
 nuget FSharp.Core >= 4.5.2 lowest_matching: true
-nuget Bolero prerelease
-nuget Bolero.Server prerelease
+nuget Bolero
+nuget Bolero.Server
 nuget Microsoft.AspNetCore.Components.WebAssembly.Build
 nuget Microsoft.AspNetCore.Components.WebAssembly.Server
 nuget Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation
