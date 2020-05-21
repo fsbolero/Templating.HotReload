@@ -7,9 +7,9 @@ framework: auto-detect
 nuget FSharp.Core >= 4.5.2 lowest_matching: true
 nuget Bolero prerelease
 nuget Bolero.Server prerelease
-nuget Microsoft.AspNetCore.Components.WebAssembly.Build 3.2.0-preview2.20160.5
-nuget Microsoft.AspNetCore.Components.WebAssembly.Server 3.2.0-preview2.20160.5 copy_local: true
-nuget Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation >= 3.1.2
+nuget Microsoft.AspNetCore.Components.WebAssembly.Build
+nuget Microsoft.AspNetCore.Components.WebAssembly.Server
+nuget Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation
 nuget Microsoft.AspNetCore.SignalR.Client >= 3.1.0
 nuget HtmlAgilityPack >= 1.8.0
 
