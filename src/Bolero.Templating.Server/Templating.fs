@@ -45,10 +45,11 @@ type WatcherConfig =
         Delay: TimeSpan
     }
 
+/// [omit]
 [<AutoOpen>]
-module internal Impl =
+module Impl =
 
-    let rec asyncRetry (times: int) (job: Async<'T>) : Async<option<'T>> = async {
+    let rec private asyncRetry (times: int) (job: Async<'T>) : Async<option<'T>> = async {
         try
             let! x = job
             return Some x
@@ -60,7 +61,7 @@ module internal Impl =
                 return! asyncRetry (times - 1) job
     }
 
-    let delayed (delay: TimeSpan) (callback: 'K -> unit) =
+    let private delayed (delay: TimeSpan) (callback: 'K -> unit) =
         let cache = ConcurrentDictionary<'K, Timers.Timer>()
         fun (key: 'K) ->
             cache.AddOrUpdate(key,
