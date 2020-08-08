@@ -24,25 +24,29 @@ open System
 open System.Collections.Concurrent
 open System.Threading.Tasks
 open Microsoft.Extensions.DependencyInjection
-open Microsoft.JSInterop
 open Microsoft.AspNetCore.Components
 open Bolero
 open Bolero.Templating
 open Bolero.TemplatingInternals
 open Microsoft.AspNetCore.SignalR.Client
-open Microsoft.AspNetCore.Http.Connections
+
+type private CacheEntry =
+    | Requested
+    | Received of Parsing.ParsedTemplates
 
 [<AbstractClass>]
 type ClientBase() =
 
-    let cache = ConcurrentDictionary<string, Parsing.ParsedTemplates>()
+    let cache = ConcurrentDictionary<string, CacheEntry>()
 
     member this.StoreFileContent(filename, content) =
-        cache.[filename] <- Parsing.ParseFileOrContent content ""
+        cache.[filename] <- Received (Parsing.ParseFileOrContent content "")
 
     member this.RefreshAllFiles() =
-        cache.Keys
-        |> Seq.map this.RequestFile
+        cache
+        |> Seq.choose (function
+            | KeyValue (_, Requested) -> None
+            | KeyValue (filename, Received _) -> Some (this.RequestFile filename))
         |> Async.Parallel
         |> Async.Ignore
 
@@ -53,11 +57,13 @@ type ClientBase() =
     interface IClient with
 
         member this.RequestTemplate(filename, subtemplate) =
-            match cache.TryGetValue(filename) with
-            | false, _ ->
+            let entry = cache.GetOrAdd(filename, fun filename ->
                 this.RequestFile filename |> Async.Start
+                Requested)
+            match entry with
+            | Requested ->
                 None
-            | true, tpl ->
+            | Received tpl ->
                 Some (fun vars ->
                     let tpl =
                         match subtemplate with
