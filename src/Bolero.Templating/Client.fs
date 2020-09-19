@@ -23,12 +23,13 @@ namespace Bolero.Templating.Client
 open System
 open System.Collections.Concurrent
 open System.Threading.Tasks
-open Microsoft.Extensions.DependencyInjection
 open Microsoft.AspNetCore.Components
+open Microsoft.AspNetCore.SignalR.Client
+open Microsoft.Extensions.DependencyInjection
 open Bolero
 open Bolero.Templating
 open Bolero.TemplatingInternals
-open Microsoft.AspNetCore.SignalR.Client
+open Elmish
 
 type private CacheEntry =
     | Requested
@@ -136,9 +137,10 @@ module Program =
         TemplateCache.client <- client
         client :> IClient
 
-    let withHotReload (program: Elmish.Program<ProgramComponent<'model, 'msg>, 'model, 'msg, Node>) =
-        { program with
-            init = fun comp ->
+    let withHotReload (program: Program<ProgramComponent<'model, 'msg>, 'model, 'msg, Node>) =
+        program
+        |> Program.map
+            (fun init (comp: ProgramComponent<'model, 'msg>) ->
                 let client =
                     // In server mode, the IClient service is set by services.AddHotReload().
                     // In client mode, it is not set, so we create it here.
@@ -146,7 +148,8 @@ module Program =
                     | null -> registerClient comp
                     | client -> client
                 client.SetOnChange(comp.Rerender)
-                program.init comp }
+                init comp)
+            id id id id
 
     [<Obsolete "Use withHotReload instead">]
     let inline withHotReloading program =

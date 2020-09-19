@@ -4,7 +4,7 @@ storage: none
 framework: auto-detect
 
 # Project references
-nuget FSharp.Core >= 4.5.2 lowest_matching: true
+nuget FSharp.Core >= 4.7 lowest_matching: true
 nuget Bolero
 nuget Bolero.Server
 nuget Microsoft.AspNetCore.Components.WebAssembly.Build
