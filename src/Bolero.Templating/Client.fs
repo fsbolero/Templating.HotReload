@@ -26,6 +26,7 @@ open System.Threading.Tasks
 open Microsoft.AspNetCore.Components
 open Microsoft.AspNetCore.SignalR.Client
 open Microsoft.Extensions.DependencyInjection
+open Microsoft.Extensions.Logging
 open Bolero
 open Bolero.Templating
 open Bolero.TemplatingInternals
@@ -79,7 +80,7 @@ type ClientBase() =
         member this.FileChanged(filename, content) =
             this.StoreFileContent(filename, content)
 
-type SignalRClient(settings: HotReloadSettings, nav: NavigationManager) as this =
+type SignalRClient(settings: HotReloadSettings, nav: NavigationManager, logger: ILogger<SignalRClient>) as this =
     inherit ClientBase()
 
     let hub =
@@ -104,14 +105,14 @@ type SignalRClient(settings: HotReloadSettings, nav: NavigationManager) as this 
                 connected <- true
             with _ ->
                 do! Async.Sleep settings.ReconnectDelayInMs
-                printfn "Hot reload reconnecting..."
-        printfn "Hot reload connected!"
+                logger.LogInformation("Hot reload reconnecting...")
+        logger.LogInformation("Hot reload connected!")
         do! this.RefreshAllFiles()
         rerender()
     }
 
     do  hub.add_Closed(fun _ ->
-            printfn "Hot reload disconnected!"
+            logger.LogInformation("Hot reload disconnected!")
             connect |> Async.StartAsTask :> Task)
         setupHandlers()
         connect |> Async.Start
@@ -121,7 +122,7 @@ type SignalRClient(settings: HotReloadSettings, nav: NavigationManager) as this 
             let! content = hub.InvokeAsync<string>("RequestFile", filename) |> Async.AwaitTask
             return this.StoreFileContent(filename, content)
         with exn ->
-            printfn "Hot reload failed to request file: %A" exn
+            logger.LogError(exn, "Hot reload failed to request file")
     }
 
     override this.SetOnChange(callback) =
@@ -133,7 +134,10 @@ module Program =
         let settings =
             let s = comp.Services.GetService<HotReloadSettings>()
             if obj.ReferenceEquals(s, null) then HotReloadSettings.Default else s
-        let client = new SignalRClient(settings, comp.NavigationManager)
+        let logger =
+            let loggerFactory = comp.Services.GetService<ILoggerFactory>()
+            loggerFactory.CreateLogger<SignalRClient>()
+        let client = new SignalRClient(settings, comp.NavigationManager, logger)
         TemplateCache.client <- client
         client :> IClient
 
