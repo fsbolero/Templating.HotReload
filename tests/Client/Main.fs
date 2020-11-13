@@ -208,7 +208,5 @@ type MyApp() =
 
     override this.Program =
         Program.mkProgram (fun _ -> initModel(), []) update (view this.JSRuntime)
-        |> Program.withConsoleTrace
-        |> Program.withErrorHandler (fun (msg, exn) -> printfn "%s: %A" msg exn)
         |> Program.withRouter router
         |> Program.withHotReload

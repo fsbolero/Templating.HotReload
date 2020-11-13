@@ -1,16 +1,15 @@
 source https://api.nuget.org/v3/index.json
 source https://ci.appveyor.com/nuget/bolero
 storage: none
-framework: auto-detect
+framework: net5.0
 
 # Project references
-nuget FSharp.Core >= 4.7 lowest_matching: true
-nuget Bolero
-nuget Bolero.Server
-nuget Microsoft.AspNetCore.Components.WebAssembly.Build
-nuget Microsoft.AspNetCore.Components.WebAssembly.Server
-nuget Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation
-nuget Microsoft.AspNetCore.SignalR.Client >= 3.1.0
+nuget FSharp.Core >= 5.0 lowest_matching: true
+nuget Bolero prerelease
+nuget Bolero.Server prerelease
+nuget Microsoft.AspNetCore.Components.WebAssembly.Server >= 5.0
+nuget Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation >= 5.0
+nuget Microsoft.AspNetCore.SignalR.Client >= 5.0
 nuget HtmlAgilityPack >= 1.8.0
 
 # Build and test references

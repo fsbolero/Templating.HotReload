@@ -12,25 +12,18 @@ branches:
 skip_tags: true
 
 init:
+  - sudo apt update && sudo apt-get install -y dotnet-sdk-5.0
   - git config --global core.autocrlf input
 
 before_build:
   - dotnet tool restore
-  - export SEMVER="$(dotnet nbgv get-version -v SemVer2)"
-  - appveyor UpdateBuild -Version "$SEMVER ($APPVEYOR_BUILD_ID)"
+  - dotnet nbgv cloud
 
 build_script:
   - export NUGET_PACKAGES="$APPVEYOR_BUILD_FOLDER/.nuget"
-
-  # Chrome on AV is not latest
-  - dotnet tool restore
-  - dotnet paket add Selenium.WebDriver.ChromeDriver --version 76.0.3809.12600
-  - dotnet restore
-
-  - '$BUILD_SCRIPT -t pack -c Release -v "$SEMVER"'
+  - ./build.sh -t pack -c Release
 
 environment:
-  BUILD_SCRIPT: ./build.sh
   GH_TOKEN:
     secure: dhFy1eZoqG4QPkKTuLFxix7QQMxaIyIpYjkvTU3CukYZz1CEOJeHfBSaT8tkPsGL
 
