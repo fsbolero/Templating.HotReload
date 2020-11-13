@@ -125,6 +125,8 @@ module Impl =
         let callback (args: FileSystemEventArgs) =
             delayedOnchange args.FullPath
 
+        let mutable watcher = None
+
         member _.Changed = changed.Publish
 
         member _.FullPathOf(filename) =
@@ -141,12 +143,18 @@ module Impl =
             fsw.Created.Add(callback)
             fsw.Changed.Add(callback)
             fsw.Renamed.Add(callback)
+            watcher <- Some fsw
             TemplateCache.client <-
                 { new Client.ClientBase() with
                     member __.SetOnChange(_) = ()
                     member __.RequestFile(filename) =
                         onchange (fullPathOf filename)
                 }
+
+        interface IDisposable with
+
+            member _.Dispose() =
+                watcher |> Option.iter (fun w -> w.Dispose())
 
     /// Client used when running in Blazor server-side mode.
     and Client(watcher: Watcher) =
@@ -191,15 +199,6 @@ type ServerTemplatingExtensions =
                 Directory = defaultArg templateDir config.Directory
                 Delay = defaultArg delay config.Delay
             })
-
-    [<Extension>]
-    [<Obsolete "Use endpoints.UseHotReload inside IApplicationBuilder.UseEndpoints instead">]
-    static member UseHotReload(this: IApplicationBuilder, ?urlPath: string) : IApplicationBuilder =
-        this.ApplicationServices.GetService<Watcher>().Start()
-        let urlPath = defaultArg urlPath HotReloadSettings.Default.Url
-        this.UseSignalR(fun route ->
-            route.MapHub<HotReloadHub>(PathString urlPath)
-        )
 
     [<Extension>]
     static member UseHotReload(this: IEndpointRouteBuilder, ?urlPath: string) : unit =

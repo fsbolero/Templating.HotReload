@@ -26,7 +26,9 @@ open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.Configuration
 open Microsoft.Extensions.DependencyInjection
+open Bolero.Server.RazorHost
 open Bolero.Templating.Server
+open Microsoft.Extensions.Logging
 
 type Startup(config: IConfiguration) =
     let serverSide = config.GetValue("bolero:serverside", false)
@@ -35,32 +37,26 @@ type Startup(config: IConfiguration) =
         services.AddMvc().AddRazorRuntimeCompilation() |> ignore
         services.AddServerSideBlazor() |> ignore
         services
+            .AddBoleroHost()
             .AddHotReload(__SOURCE_DIRECTORY__ + "/../Client")
             .AddSingleton<HtmlEncoder>(HtmlEncoder.Default)
         |> ignore
 
-    member this.Configure(app: IApplicationBuilder) =
+    member this.Configure(app: IApplicationBuilder, log: ILogger<Startup>) =
         app.UseStaticFiles()
             .UseRouting()
-            |> ignore
-
-        if serverSide then
-            app.UseEndpoints(fun endpoints ->
-                    endpoints.UseHotReload()
-                    endpoints.MapBlazorHub() |> ignore
-                    endpoints.MapFallbackToPage("/_Host") |> ignore)
-        else
-            app.UseBlazorFrameworkFiles()
-                .UseEndpoints(fun endpoints ->
-                    endpoints.UseHotReload()
-                    endpoints.MapDefaultControllerRoute() |> ignore
-                    endpoints.MapFallbackToFile("index.html") |> ignore)
+            .UseBlazorFrameworkFiles()
+            .UseEndpoints(fun endpoints ->
+                endpoints.UseHotReload()
+                endpoints.MapBlazorHub() |> ignore
+                endpoints.MapFallbackToPage("/_Host") |> ignore)
         |> ignore
 
 module Program =
     [<EntryPoint>]
     let Main args =
         WebHost.CreateDefaultBuilder(args)
+            .UseStaticWebAssets()
             .UseStartup<Startup>()
             .Build()
             .Run()
