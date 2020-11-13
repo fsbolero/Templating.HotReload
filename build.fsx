@@ -42,12 +42,11 @@ let buildArgs o =
     sprintf "-c:%s -v:%s" (config o) (verbosity o)
 
 Target.description "Run the compilation phase proper"
-Target.create "build" (fun o ->
+Target.create "build" <| fun o ->
     dotnet "build" "Bolero.HotReload.sln %s" (buildArgs o)
-)
 
 Target.description "Create the NuGet packages"
-Target.create "pack" (fun o ->
+Target.create "pack" <| fun o ->
     Paket.pack (fun p ->
         { p with
             OutputPath = "build"
@@ -55,22 +54,14 @@ Target.create "pack" (fun o ->
             ToolType = ToolType.CreateLocalTool()
         }
     )
-)
 
-Target.description "Run the test project in client-side mode"
-Target.create "run-client" (fun _ ->
-    dotnet "run" "-p tests/Server --bolero:serverside=false"
-)
-
-Target.description "Run the test project in server-side mode"
-Target.create "run-server" (fun _ ->
-    dotnet "run" "-p tests/Server --bolero:serverside=true"
-)
+Target.description "Run the test project"
+Target.create "run" <| fun _ ->
+    dotnet "run" "-p tests/Server"
 
 "build"
     ==> "pack"
 
-"build" ==> "run-client"
-"build" ==> "run-server"
+"build" ==> "run"
 
 Target.runOrDefaultWithArguments "build"

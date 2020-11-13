@@ -31,7 +31,6 @@ open Bolero.Templating.Server
 open Microsoft.Extensions.Logging
 
 type Startup(config: IConfiguration) =
-    let serverSide = config.GetValue("bolero:serverside", false)
 
     member this.ConfigureServices(services: IServiceCollection) =
         services.AddMvc().AddRazorRuntimeCompilation() |> ignore
@@ -39,7 +38,6 @@ type Startup(config: IConfiguration) =
         services
             .AddBoleroHost()
             .AddHotReload(__SOURCE_DIRECTORY__ + "/../Client")
-            .AddSingleton<HtmlEncoder>(HtmlEncoder.Default)
         |> ignore
 
     member this.Configure(app: IApplicationBuilder, log: ILogger<Startup>) =
