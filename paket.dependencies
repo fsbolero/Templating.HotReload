@@ -17,15 +17,3 @@ github fsbolero/bolero tools/Utility.fsx
 github fsbolero/bolero src/Bolero.Templating.Provider/Path.fs
 github fsbolero/bolero src/Bolero.Templating.Provider/Parsing.fs
 nuget Nerdbank.GitVersioning copy_local: true
-
-group fake
-source https://api.nuget.org/v3/index.json
-storage: none
-framework: netstandard2.0
-
-nuget Fake.Core.Target
-nuget Fake.IO.FileSystem
-nuget Fake.DotNet.AssemblyInfoFile
-nuget Fake.DotNet.Cli
-nuget Fake.DotNet.Paket
-nuget FSharp.Data ~> 3.0-beta

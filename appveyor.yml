@@ -21,7 +21,9 @@ before_build:
 
 build_script:
   - export NUGET_PACKAGES="$APPVEYOR_BUILD_FOLDER/.nuget"
-  - ./build.sh -t pack -c Release
+  - dotnet paket restore
+  - dotnet build -c:release
+  - dotnet paket pack ./build --version "$(dotnet nbgv get-version -v SemVer2)"
 
 environment:
   GH_TOKEN:
