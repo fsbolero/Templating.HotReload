@@ -2,19 +2,23 @@ STORAGE: NONE
 RESTRICTION: == net5.0
 NUGET
   remote: https://ci.appveyor.com/nuget/bolero
-    Bolero (0.16.24)
+    Bolero (0.16.26)
       Elmish (>= 3.1 < 4.0)
       FSharp.Core (>= 5.0)
+      FSharp.SystemTextJson (>= 0.15.14)
       Microsoft.AspNetCore.Components.WebAssembly (>= 5.0 < 6.0)
       Microsoft.Extensions.Http (>= 5.0 < 6.0)
-    Bolero.Server (0.16.24)
-      Bolero (0.16.24)
+    Bolero.Server (0.16.26)
+      Bolero (0.16.26)
       FSharp.Core (>= 5.0)
+      FSharp.SystemTextJson (>= 0.15.14)
       TaskBuilder.fs (>= 2.1)
   remote: https://api.nuget.org/v3/index.json
     Elmish (3.1)
       FSharp.Core (>= 4.6.2)
     FSharp.Core (5.0)
+    FSharp.SystemTextJson (0.15.14)
+      FSharp.Core (>= 4.7)
     HtmlAgilityPack (1.11.28)
     Microsoft.AspNetCore.Authorization (5.0)
       Microsoft.AspNetCore.Metadata (>= 5.0)
