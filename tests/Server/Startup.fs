@@ -26,7 +26,7 @@ open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.Configuration
 open Microsoft.Extensions.DependencyInjection
-open Bolero.Server.RazorHost
+open Bolero.Server
 open Bolero.Templating.Server
 open Microsoft.Extensions.Logging
 

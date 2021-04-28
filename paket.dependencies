@@ -5,8 +5,8 @@ framework: net5.0
 
 # Project references
 nuget FSharp.Core >= 5.0 lowest_matching: true
-nuget Bolero prerelease
-nuget Bolero.Server prerelease
+nuget Bolero >= 0.17.25 prerelease
+nuget Bolero.Server >= 0.17.25 prerelease
 nuget Microsoft.AspNetCore.Components.WebAssembly.Server >= 5.0
 nuget Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation >= 5.0
 nuget Microsoft.AspNetCore.SignalR.Client >= 5.0
