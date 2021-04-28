@@ -27,6 +27,7 @@ open Microsoft.AspNetCore.Components
 open Microsoft.AspNetCore.SignalR.Client
 open Microsoft.Extensions.DependencyInjection
 open Microsoft.Extensions.Logging
+open FSharp.Control.Tasks
 open Bolero
 open Bolero.Templating
 open Bolero.TemplatingInternals
@@ -49,10 +50,9 @@ type ClientBase() =
         |> Seq.choose (function
             | KeyValue (_, Requested) -> None
             | KeyValue (filename, Received _) -> Some (this.RequestFile filename))
-        |> Async.Parallel
-        |> Async.Ignore
+        |> Task.WhenAll
 
-    abstract RequestFile : string -> Async<unit>
+    abstract RequestFile : string -> Task
 
     abstract SetOnChange : (unit -> unit) -> unit
 
@@ -60,7 +60,7 @@ type ClientBase() =
 
         member this.RequestTemplate(filename, subtemplate) =
             let entry = cache.GetOrAdd(filename, fun filename ->
-                this.RequestFile filename |> Async.Start
+                this.RequestFile(filename).Start()
                 Requested)
             match entry with
             | Requested ->
@@ -97,14 +97,14 @@ type SignalRClient(settings: HotReloadSettings, nav: NavigationManager, logger: 
             Task.CompletedTask)
         |> ignore
 
-    let connect = async {
+    let connect() = unitTask {
         let mutable connected = false
         while not connected do
             try
-                let! _ = hub.StartAsync() |> Async.AwaitTask
+                do! hub.StartAsync()
                 connected <- true
             with _ ->
-                do! Async.Sleep settings.ReconnectDelayInMs
+                do! Task.Delay(settings.ReconnectDelayInMs)
                 logger.LogInformation("Hot reload reconnecting...")
         logger.LogInformation("Hot reload connected!")
         do! this.RefreshAllFiles()
@@ -113,13 +113,13 @@ type SignalRClient(settings: HotReloadSettings, nav: NavigationManager, logger: 
 
     do  hub.add_Closed(fun _ ->
             logger.LogInformation("Hot reload disconnected!")
-            connect |> Async.StartAsTask :> Task)
+            connect())
         setupHandlers()
-        connect |> Async.Start
+        connect().Start()
 
-    override this.RequestFile(filename) = async {
+    override this.RequestFile(filename) = unitTask {
         try
-            let! content = hub.InvokeAsync<string>("RequestFile", filename) |> Async.AwaitTask
+            let! content = hub.InvokeAsync<string>("RequestFile", filename)
             return this.StoreFileContent(filename, content)
         with exn ->
             logger.LogError(exn, "Hot reload failed to request file")

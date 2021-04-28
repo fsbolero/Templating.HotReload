@@ -31,6 +31,7 @@ open Microsoft.AspNetCore.SignalR
 open Microsoft.Extensions.DependencyInjection
 open Microsoft.Extensions.Hosting
 open Microsoft.Extensions.Logging
+open FSharp.Control.Tasks
 open Bolero.Templating
 open Bolero.TemplatingInternals
 
@@ -49,9 +50,9 @@ type WatcherConfig =
 [<AutoOpen>]
 module Impl =
 
-    let rec private asyncRetry (times: int) (job: Async<'T>) : Async<option<'T>> = async {
+    let rec private asyncRetry (times: int) (job: unit -> Task<'T>) : Task<option<'T>> = task {
         try
-            let! x = job
+            let! x = job()
             return Some x
         with _ ->
             if times <= 1 then
@@ -82,13 +83,12 @@ module Impl =
         inherit Hub()
 
         member this.RequestFile(filename: string) : Task<string> =
-            async {
+            task {
                 let fullPath = watcher.FullPathOf(filename)
                 do! this.Groups.AddToGroupAsync(this.Context.ConnectionId, fullPath) |> Async.AwaitTask
                 let! fileContent = watcher.GetFileContent fullPath
                 return Option.toObj fileContent
             }
-            |> Async.StartAsTask
 
     and Watcher(config: WatcherConfig, env: IHostEnvironment, log: ILogger<Watcher>, hub: IHubContext<HotReloadHub>) =
         let dir =
@@ -100,15 +100,15 @@ module Impl =
             |> Path.Canonicalize
 
         let getFileContent fullPath =
-            asyncRetry 3 <| async {
+            asyncRetry 3 <| fun () -> task {
                 use f = File.OpenText(fullPath)
-                return! f.ReadToEndAsync() |> Async.AwaitTask
+                return! f.ReadToEndAsync()
             }
 
         let changed = Event<string * string>()
 
         let onchange (fullPath: string) =
-            async {
+            unitTask {
                 let filename = Path.GetRelativePath dir fullPath
                 match! getFileContent fullPath with
                 | None ->
@@ -117,10 +117,9 @@ module Impl =
                     changed.Trigger((filename, content))
                     return! hub.Clients.Group(fullPath)
                         .SendAsync("FileChanged", filename, content)
-                        |> Async.AwaitTask
             }
 
-        let delayedOnchange = delayed config.Delay (Async.StartImmediate << onchange)
+        let delayedOnchange = delayed config.Delay (fun s -> (onchange s).Start())
 
         let callback (args: FileSystemEventArgs) =
             delayedOnchange args.FullPath

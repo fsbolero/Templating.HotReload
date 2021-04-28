@@ -11,6 +11,7 @@ nuget Microsoft.AspNetCore.Components.WebAssembly.Server >= 5.0
 nuget Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation >= 5.0
 nuget Microsoft.AspNetCore.SignalR.Client >= 5.0
 nuget HtmlAgilityPack >= 1.8.0
+nuget Ply >= 0.3.1
 
 # Build and test references
 github fsbolero/bolero tools/Utility.fsx
