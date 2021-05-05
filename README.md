@@ -12,7 +12,7 @@ To learn more, you can check [the documentation](https://fsbolero.io/docs/Templa
 
 To get started, you need the following installed:
 
-* .NET Core SDK 3.0-preview5 or newer. Download it [here](https://dotnet.microsoft.com/download/dotnet-core/3.0).
+* .NET SDK 5.0. Download it [here](https://dotnet.microsoft.com/download/dotnet/5.0).
 
 Then:
 
