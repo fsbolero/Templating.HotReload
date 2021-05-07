@@ -20,7 +20,6 @@
 
 namespace Bolero.Test.Server
 
-open System.Text.Encodings.Web
 open Microsoft.AspNetCore
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Hosting
@@ -30,10 +29,26 @@ open Bolero.Server
 open Bolero.Templating.Server
 open Microsoft.Extensions.Logging
 
+module Page =
+    open Bolero.Html
+    open Bolero.Server.Html
+
+    let index = doctypeHtml [] [
+        head [] [
+            title [] [text "Bolero Templating Hot Reload test"]
+            meta [attr.charset "UTF-8"]
+            ``base`` [attr.href "/"]
+        ]
+        body [] [
+            div [attr.id "main"] [rootComp<Bolero.Test.Client.Main.MyApp>]
+            boleroScript
+        ]
+    ]
+
 type Startup(config: IConfiguration) =
 
     member this.ConfigureServices(services: IServiceCollection) =
-        services.AddMvc().AddRazorRuntimeCompilation() |> ignore
+        services.AddMvc() |> ignore
         services.AddServerSideBlazor() |> ignore
         services
             .AddBoleroHost()
@@ -47,7 +62,7 @@ type Startup(config: IConfiguration) =
             .UseEndpoints(fun endpoints ->
                 endpoints.UseHotReload()
                 endpoints.MapBlazorHub() |> ignore
-                endpoints.MapFallbackToPage("/_Host") |> ignore)
+                endpoints.MapFallbackToBolero(Page.index) |> ignore)
         |> ignore
 
 module Program =

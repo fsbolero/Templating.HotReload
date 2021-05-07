@@ -8,7 +8,6 @@ nuget FSharp.Core >= 5.0 lowest_matching: true
 nuget Bolero >= 0.17.25 prerelease
 nuget Bolero.Server >= 0.17.25 prerelease
 nuget Microsoft.AspNetCore.Components.WebAssembly.Server >= 5.0
-nuget Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation >= 5.0
 nuget Microsoft.AspNetCore.SignalR.Client >= 5.0
 nuget HtmlAgilityPack >= 1.8.0
 nuget Ply >= 0.3.1
