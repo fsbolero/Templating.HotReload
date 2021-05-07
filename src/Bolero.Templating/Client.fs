@@ -60,7 +60,7 @@ type ClientBase() =
 
         member this.RequestTemplate(filename, subtemplate) =
             let entry = cache.GetOrAdd(filename, fun filename ->
-                this.RequestFile(filename).Start()
+                this.RequestFile(filename) |> ignore
                 Requested)
             match entry with
             | Requested ->
@@ -115,7 +115,7 @@ type SignalRClient(settings: HotReloadSettings, nav: NavigationManager, logger: 
             logger.LogInformation("Hot reload disconnected!")
             connect())
         setupHandlers()
-        connect().Start()
+        connect() |> ignore
 
     override this.RequestFile(filename) = unitTask {
         try
