@@ -1,12 +1,12 @@
 source https://api.nuget.org/v3/index.json
-source https://ci.appveyor.com/nuget/bolero
+source https://nuget.pkg.github.com/fsbolero/index.json
 storage: none
 framework: net5.0
 
 # Project references
 nuget FSharp.Core >= 5.0 lowest_matching: true
-nuget Bolero >= 0.17.25 prerelease
-nuget Bolero.Server >= 0.17.25 prerelease
+nuget Bolero >= 0.18.5 prerelease
+nuget Bolero.Server >= 0.18.5 prerelease
 nuget Microsoft.AspNetCore.Components.WebAssembly.Server >= 5.0
 nuget Microsoft.AspNetCore.SignalR.Client >= 5.0
 nuget HtmlAgilityPack >= 1.8.0
