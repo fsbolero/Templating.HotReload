@@ -1,15 +1,15 @@
 STORAGE: NONE
 RESTRICTION: == net5.0
 NUGET
-  remote: https://ci.appveyor.com/nuget/bolero
-    Bolero (0.17.25)
+  remote: https://nuget.pkg.github.com/fsbolero/index.json
+    Bolero (0.18.5-alpha)
       Elmish (>= 3.1 < 4.0)
       FSharp.Core (>= 5.0)
       FSharp.SystemTextJson (>= 0.15.14)
       Microsoft.AspNetCore.Components.WebAssembly (>= 5.0 < 6.0)
       Microsoft.Extensions.Http (>= 5.0 < 6.0)
-    Bolero.Server (0.17.25)
-      Bolero (0.17.25)
+    Bolero.Server (0.18.5-alpha)
+      Bolero (0.18.5-alpha)
       FSharp.Core (>= 5.0)
       FSharp.SystemTextJson (>= 0.15.14)
       Ply (>= 0.3.1)
@@ -126,6 +126,6 @@ NUGET
     System.Threading.Tasks.Extensions (4.5.4)
 GITHUB
   remote: fsbolero/bolero
-    src/Bolero.Templating.Provider/Parsing.fs (486c8b18c12e31984bae26ef26378e36ca93c0ed)
-    src/Bolero.Templating.Provider/Path.fs (486c8b18c12e31984bae26ef26378e36ca93c0ed)
-    tools/Utility.fsx (486c8b18c12e31984bae26ef26378e36ca93c0ed)
+    src/Bolero.Templating.Provider/Parsing.fs (f27d30d2dad38eab4f1a40431dede8108156f528)
+    src/Bolero.Templating.Provider/Path.fs (f27d30d2dad38eab4f1a40431dede8108156f528)
+    tools/Utility.fsx (f27d30d2dad38eab4f1a40431dede8108156f528)
