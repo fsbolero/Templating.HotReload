@@ -34,7 +34,7 @@ jobs:
           fi
           # Build
           dotnet tool restore
-          dotnet paket config add-credentials https://nuget.pkg.github.com/fsbolero/index.json --username fsbolero --password ${{ secrets.GITHUB_TOKEN }}
+          dotnet paket config add-credentials https://nuget.pkg.github.com/${{github.repository_owner}}/index.json --username ${{github.repository_owner}} --password ${{secrets.GITHUB_TOKEN}}
           dotnet paket install
           DOTNET_RUNTIME_IDENTIFIER=linux-x64 dotnet build -c:release
           # Package
