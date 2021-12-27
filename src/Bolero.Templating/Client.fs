@@ -42,7 +42,7 @@ type ClientBase() =
     let cache = ConcurrentDictionary<string, CacheEntry>()
 
     member this.StoreFileContent(filename, content) =
-        cache.[filename] <- Received (Parsing.ParseFileOrContent content "")
+        cache[filename] <- Received (Parsing.ParseFileOrContent content "")
 
     member this.RefreshAllFiles() =
         cache
@@ -69,7 +69,7 @@ type ClientBase() =
                     let tpl =
                         match subtemplate with
                         | null -> tpl.Main
-                        | sub -> tpl.Nested.[sub]
+                        | sub -> tpl.Nested[sub]
                     let expr = Parsing.Concat tpl.Expr
                     ConvertExpr.ConvertNode vars expr)
 

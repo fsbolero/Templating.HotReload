@@ -200,7 +200,7 @@ let view js model dispatch =
         cond model.page <| function
             | Form -> viewForm js model dispatch
             | Collection -> viewCollection model dispatch
-            | Item k -> ecomp<ViewItemPage,_,_> [] (k, model.items.[k]) dispatch
+            | Item k -> ecomp<ViewItemPage,_,_> [] (k, model.items[k]) dispatch
     ]
 
 type MyApp() =

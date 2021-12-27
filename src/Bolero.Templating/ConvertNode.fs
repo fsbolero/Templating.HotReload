@@ -58,7 +58,7 @@ let WrapExpr (innerType: Parsing.HoleType) (outerType: Parsing.HoleType) (expr: 
 
 let WrapAndConvert (vars: Map<string, obj>) (subst: list<Parsing.VarSubstitution>) convert expr =
     let vars = (vars, subst) ||> List.fold (fun vars wrap ->
-        let unwrapped = vars.[wrap.name]
+        let unwrapped = vars[wrap.name]
         let wrapped = WrapExpr wrap.innerType wrap.outerType unwrapped
         Map.add wrap.name (defaultArg wrapped unwrapped) vars
     )
@@ -71,7 +71,7 @@ let rec ConvertAttrTextPart (vars: Map<string, obj>) (text: Parsing.Expr) : stri
     | Parsing.PlainHtml text ->
         text
     | Parsing.VarContent varName ->
-        vars.[varName].ToString()
+        vars[varName].ToString()
     | Parsing.WrapVars (subst, text) ->
         WrapAndConvert vars subst ConvertAttrTextPart text
     | Parsing.Fst _ | Parsing.Snd _ | Parsing.Attr _ | Parsing.Elt _ ->
@@ -84,11 +84,11 @@ let rec ConvertAttrValue (vars: Map<string, obj>) (text: Parsing.Expr) : obj =
     | Parsing.PlainHtml text ->
         box text
     | Parsing.VarContent varName ->
-        vars.[varName]
+        vars[varName]
     | Parsing.Fst varName ->
-        FSharp.Reflection.FSharpValue.GetTupleField(vars.[varName], 0)
+        FSharp.Reflection.FSharpValue.GetTupleField(vars[varName], 0)
     | Parsing.Snd varName ->
-        FSharp.Reflection.FSharpValue.GetTupleField(vars.[varName], 1)
+        FSharp.Reflection.FSharpValue.GetTupleField(vars[varName], 1)
     | Parsing.WrapVars (subst, text) ->
         WrapAndConvert vars subst ConvertAttrValue text
     | Parsing.Attr _ | Parsing.Elt _ ->
@@ -101,7 +101,7 @@ let rec ConvertAttr (vars: Map<string, obj>) (attr: Parsing.Expr) : Attr =
     | Parsing.Attr (name, value) ->
         Attr (name, ConvertAttrValue vars value)
     | Parsing.VarContent varName ->
-        vars.[varName] :?> Attr
+        vars[varName] :?> Attr
     | Parsing.WrapVars (subst, attr) ->
         WrapAndConvert vars subst ConvertAttr attr
     | Parsing.Fst _ | Parsing.Snd _ | Parsing.PlainHtml _ | Parsing.Elt _ ->
@@ -116,7 +116,7 @@ let rec ConvertNode (vars: Map<string, obj>) (node: Parsing.Expr) : Node =
     | Parsing.Elt (name, attrs, children) ->
         Node.Elt(name, List.map (ConvertAttr vars) attrs, List.map (ConvertNode vars) children)
     | Parsing.VarContent varName ->
-        vars.[varName] :?> Node
+        vars[varName] :?> Node
     | Parsing.WrapVars (subst, node) ->
         WrapAndConvert vars subst ConvertNode node
     | Parsing.Fst _ | Parsing.Snd _ | Parsing.Attr _ ->
