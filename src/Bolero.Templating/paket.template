@@ -1,7 +1,7 @@
 type project
 id Bolero.HotReload
-projectUrl https://github.com/fsbolero/bolero
-repositoryUrl https://github.com/fsbolero/bolero
+projectUrl https://github.com/fsbolero/Templating.HotReload
+repositoryUrl https://github.com/fsbolero/Templating.HotReload
 repositoryType git
 description
     Client-side component of the HTML template hot reloading for Bolero: a set of tools and libraries to run F# applications in WebAssembly using Blazor

@@ -9,6 +9,7 @@
   <ItemGroup>
     <Compile Include="Templating.fs" />
     <None Include="paket.references" />
+    <Content Include="paket.template" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bolero.Templating\Bolero.Templating.fsproj" />
