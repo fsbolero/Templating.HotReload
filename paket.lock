@@ -118,13 +118,9 @@ NUGET
     Microsoft.JSInterop.WebAssembly (5.0)
       Microsoft.JSInterop (>= 5.0)
     Nerdbank.GitVersioning (3.4.244) - copy_local: true
-    Ply (0.3.1)
-      FSharp.Core (>= 4.6.2)
-      System.Threading.Tasks.Extensions (>= 4.5.4)
     System.IO.Pipelines (5.0)
     System.Text.Json (4.6)
     System.Threading.Channels (5.0)
-    System.Threading.Tasks.Extensions (4.5.4)
 GITHUB
   remote: fsbolero/bolero
     src/Bolero.Templating.Provider/Parsing.fs (e8a38b3ee6dc80da176852283fbc7a4c0fceab9f)
