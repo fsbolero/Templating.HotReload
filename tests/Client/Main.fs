@@ -167,7 +167,7 @@ let viewCollection model dispatch =
         if model.revOrder then
             Seq.rev model.items
         else
-            model.items :> _
+            model.items
     CollectionTemplate()
         .AddKeyValue(model.addKey, fun i -> dispatch (SetAddKey i))
         .AddKey(fun _ -> dispatch AddKey)

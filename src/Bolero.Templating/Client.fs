@@ -129,7 +129,7 @@ type SignalRClient(settings: HotReloadSettings, nav: NavigationManager, logger: 
 
 module Program =
 
-    let private registerClient (comp: ProgramComponent<_, _>) =
+    let private registerClient (comp: ProgramComponent<_, _>) : IClient =
         let settings =
             let s = comp.Services.GetService<HotReloadSettings>()
             if obj.ReferenceEquals(s, null) then HotReloadSettings.Default else s
@@ -138,7 +138,7 @@ module Program =
             loggerFactory.CreateLogger<SignalRClient>()
         let client = new SignalRClient(settings, comp.NavigationManager, logger)
         TemplateCache.client <- client
-        client :> IClient
+        client
 
     let withHotReload (program: Program<ProgramComponent<'model, 'msg>, 'model, 'msg, Node>) =
         program
