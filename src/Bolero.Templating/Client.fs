@@ -27,7 +27,6 @@ open Microsoft.AspNetCore.Components
 open Microsoft.AspNetCore.SignalR.Client
 open Microsoft.Extensions.DependencyInjection
 open Microsoft.Extensions.Logging
-open FSharp.Control.Tasks
 open Bolero
 open Bolero.Templating
 open Bolero.TemplatingInternals
@@ -97,7 +96,7 @@ type SignalRClient(settings: HotReloadSettings, nav: NavigationManager, logger: 
             Task.CompletedTask)
         |> ignore
 
-    let connect() = unitTask {
+    let connect() : Task = task {
         let mutable connected = false
         while not connected do
             try
@@ -117,7 +116,7 @@ type SignalRClient(settings: HotReloadSettings, nav: NavigationManager, logger: 
         setupHandlers()
         connect() |> ignore
 
-    override this.RequestFile(filename) = unitTask {
+    override this.RequestFile(filename) = task {
         try
             let! content = hub.InvokeAsync<string>("RequestFile", filename)
             return this.StoreFileContent(filename, content)

@@ -25,13 +25,11 @@ open System.IO
 open System.Threading.Tasks
 open System.Runtime.CompilerServices
 open Microsoft.AspNetCore.Builder
-open Microsoft.AspNetCore.Http
 open Microsoft.AspNetCore.Routing
 open Microsoft.AspNetCore.SignalR
 open Microsoft.Extensions.DependencyInjection
 open Microsoft.Extensions.Hosting
 open Microsoft.Extensions.Logging
-open FSharp.Control.Tasks
 open Bolero.Templating
 open Bolero.TemplatingInternals
 
@@ -107,8 +105,8 @@ module Impl =
 
         let changed = Event<string * string>()
 
-        let onchange (fullPath: string) =
-            unitTask {
+        let onchange (fullPath: string) : Task =
+            task {
                 let filename = Path.GetRelativePath dir fullPath
                 match! getFileContent fullPath with
                 | None ->

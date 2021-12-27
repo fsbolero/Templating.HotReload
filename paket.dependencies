@@ -2,18 +2,19 @@ source https://api.nuget.org/v3/index.json
 source https://nuget.pkg.github.com/fsbolero/index.json
 storage: none
 framework: net5.0
+lowest_matching: true
+strategy: min
 
 # Project references
-nuget FSharp.Core >= 5.0 lowest_matching: true
-nuget Bolero >= 0.18.5 prerelease
-nuget Bolero.Server >= 0.18.5 prerelease
+nuget FSharp.Core >= 6.0
+nuget Bolero >= 0.18.12 prerelease
+nuget Bolero.Server >= 0.18.12 prerelease
 nuget Microsoft.AspNetCore.Components.WebAssembly.Server >= 5.0
 nuget Microsoft.AspNetCore.SignalR.Client >= 5.0
-nuget HtmlAgilityPack >= 1.8.0
-nuget Ply >= 0.3.1
+nuget HtmlAgilityPack >= 1.11.39
 
 # Build and test references
 github fsbolero/bolero tools/Utility.fsx
 github fsbolero/bolero src/Bolero.Templating.Provider/Path.fs
 github fsbolero/bolero src/Bolero.Templating.Provider/Parsing.fs
-nuget Nerdbank.GitVersioning copy_local: true
+nuget Nerdbank.GitVersioning copy_local: true, lowest_matching: false
