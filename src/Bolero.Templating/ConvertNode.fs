@@ -97,9 +97,9 @@ let rec ConvertAttrValue (vars: Map<string, obj>) (text: Parsing.Expr) : obj =
 let rec ConvertAttr (vars: Map<string, obj>) (attr: Parsing.Expr) : Attr =
     match attr with
     | Parsing.Concat attrs ->
-        Attrs (List.map (ConvertAttr vars) attrs)
+        Attr.Attrs (List.map (ConvertAttr vars) attrs)
     | Parsing.Attr (name, value) ->
-        Attr (name, ConvertAttrValue vars value)
+        Attr.Make name (ConvertAttrValue vars value)
     | Parsing.VarContent varName ->
         vars[varName] :?> Attr
     | Parsing.WrapVars (subst, attr) ->
@@ -114,7 +114,7 @@ let rec ConvertNode (vars: Map<string, obj>) (node: Parsing.Expr) : Node =
     | Parsing.PlainHtml str ->
         Node.RawHtml str
     | Parsing.Elt (name, attrs, children) ->
-        Node.Elt(name, List.map (ConvertAttr vars) attrs, List.map (ConvertNode vars) children)
+        Node.Elt name (List.map (ConvertAttr vars) attrs) (List.map (ConvertNode vars) children)
     | Parsing.VarContent varName ->
         vars[varName] :?> Node
     | Parsing.WrapVars (subst, node) ->

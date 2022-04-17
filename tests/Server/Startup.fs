@@ -33,17 +33,17 @@ module Page =
     open Bolero.Html
     open Bolero.Server.Html
 
-    let index = doctypeHtml [] [
-        head [] [
-            title [] [text "Bolero Templating Hot Reload test"]
-            meta [attr.charset "UTF-8"]
-            ``base`` [attr.href "/"]
-        ]
-        body [] [
-            div [attr.id "main"] [rootComp<Bolero.Test.Client.Main.MyApp>]
+    let index = doctypeHtml {
+        head {
+            title { "Bolero Templating Hot Reload test" }
+            meta { attr.charset "UTF-8" }
+            ``base`` { attr.href "/" }
+        }
+        body {
+            div { attr.id "main"; rootComp<Bolero.Test.Client.Main.MyApp> }
             boleroScript
-        ]
-    ]
+        }
+    }
 
 type Startup(config: IConfiguration) =
 

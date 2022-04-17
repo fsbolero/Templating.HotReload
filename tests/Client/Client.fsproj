@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
   <Import Project="..\..\tools\Common.props" />
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <DefineConstants Condition="'$(GhPages)' != ''">$(DefineConstants);GHPAGES</DefineConstants>
     <RazorLangVersion>3.0</RazorLangVersion>
   </PropertyGroup>

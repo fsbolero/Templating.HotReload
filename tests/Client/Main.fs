@@ -112,31 +112,31 @@ type SecretPw = Template<"""<div>
 let btnRef = HtmlRef()
 
 let viewForm (js: IJSRuntime) model dispatch =
-    div [] [
-        input [attr.value model.input; on.change (fun e -> dispatch (SetInput (unbox e.Value)))]
-        input [
-            attr.ref btnRef
+    div {
+        input { attr.value model.input; on.change (fun e -> dispatch (SetInput (unbox e.Value))) }
+        input {
             attr.``type`` "submit"
             on.click (fun _ ->
                 js.InvokeAsync("console.log", btnRef.Value) |> ignore
                 dispatch Submit
             )
             attr.style (if model.input = "" then "color:gray;" else null)
-        ]
-        div [] [text (defaultArg model.submitted "")]
-        (match model.submitted with
+            btnRef
+        }
+        div { defaultArg model.submitted "" }
+        cond model.submitted <| function
         | Some s ->
-            concat [
+            concat {
                 cond (s.Contains "secret") <| function
                     | true ->
                         SecretPw()
-                            .Kind(b [] [text "secret"])
+                            .Kind(b { "secret" })
                             .Clear(fun _ -> dispatch (SetInput ""))
                             .DblClick(fun e -> dispatch (SetInput (sprintf "(%f, %f)" e.ClientX e.ClientY)))
                             .Input(model.input, fun s -> dispatch (SetInput s))
                             .Value(model.addKey, fun k -> dispatch (SetAddKey k))
                             .Elt()
-                    | false -> empty
+                    | false -> empty()
 
                 cond (s.Contains "super") <| function
                     | true ->
@@ -144,10 +144,10 @@ let viewForm (js: IJSRuntime) model dispatch =
                             .Kind("super secret")
                             .Clear(fun _ -> dispatch (SetInput ""))
                             .Elt()
-                    | false -> empty
-            ]
-        | None -> empty)
-    ]
+                    | false -> empty()
+            }
+        | None -> empty()
+    }
 
 type CollectionTemplate = Template<"collection.html">
 
@@ -173,35 +173,35 @@ let viewCollection model dispatch =
         .AddKey(fun _ -> dispatch AddKey)
         .RevOrder(model.revOrder, fun rev -> dispatch (SetRevOrder rev))
         .Items(forEach items <| fun (KeyValue(k, v)) ->
-            ecomp<ViewItem,_,_> [] (k, v) dispatch)
+            ecomp<ViewItem,_,_> (k, v) dispatch { attr.empty() })
         .Elt()
 
 type ViewItemPage() =
     inherit ElmishComponent<int * string, Message>()
 
     override this.View ((k, v)) dispatch =
-        concat [
-            p [] [text ("Viewing page for item #" + string k)]
-            p [] [text ("Text is: " + v)]
-            p [] [a [router.HRef Collection] [text "Back to collection"]]
-        ]
+        concat {
+            p { "Viewing page for item #" + string k }
+            p { "Text is: " + v }
+            p { a { router.HRef Collection; "Back to collection" } }
+        }
 
 let view js model dispatch =
-    concat [
-        RawHtml """
+    concat {
+        rawHtml """
             <div style="color:gray">The links below should have blue background based on the current page.</div>
             <style>.active { background: lightblue; }</style>
         """
-        p [] [
-            navLink NavLinkMatch.All [router.HRef Form] [text "Form"]
-            text " "
-            navLink NavLinkMatch.Prefix [router.HRef Collection] [text "Collection"]
-        ]
+        p {
+            navLink NavLinkMatch.All { router.HRef Form; "Form" }
+            " "
+            navLink NavLinkMatch.Prefix { router.HRef Collection; "Collection" }
+        }
         cond model.page <| function
             | Form -> viewForm js model dispatch
             | Collection -> viewCollection model dispatch
-            | Item k -> ecomp<ViewItemPage,_,_> [] (k, model.items[k]) dispatch
-    ]
+            | Item k -> ecomp<ViewItemPage,_,_> (k, model.items[k]) dispatch { attr.empty() }
+    }
 
 type MyApp() =
     inherit ProgramComponent<Model, Message>()
