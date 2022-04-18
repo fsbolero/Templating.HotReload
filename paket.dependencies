@@ -7,8 +7,8 @@ strategy: min
 
 # Project references
 nuget FSharp.Core >= 6.0
-nuget Bolero >= 0.20 prerelease
-nuget Bolero.Server >= 0.20 prerelease
+nuget Bolero >= 0.20
+nuget Bolero.Server >= 0.20
 nuget Microsoft.AspNetCore.Components.WebAssembly.Server >= 6.0
 nuget Microsoft.AspNetCore.SignalR.Client >= 6.0
 nuget HtmlAgilityPack >= 1.11.39
