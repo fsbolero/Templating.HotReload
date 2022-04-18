@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.20
+
+* Update to .NET 6.
+
 ## 0.18
 
 * Loosen Microsoft.* dependencies from ~> 5.0 to >= 5.0 to allow using 6.0+.
