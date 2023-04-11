@@ -12,7 +12,8 @@
 <template id="Item">
   <li>${Value}</li>
   <li>
-    <input>
+    <input ref="${InputRef}">
+    <button onclick="${Focus}">Focus the input box</button>
     <button onclick="${SetKey}">Set key from Add field</button>
     <button onclick="${Remove}">Remove</button>
     <a href="${Url}">Go to page</a>

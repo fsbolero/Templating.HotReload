@@ -21,6 +21,7 @@
 module Bolero.Test.Client.Main
 
 open Microsoft.AspNetCore.Components.Routing
+open Microsoft.AspNetCore.Components
 open Microsoft.JSInterop
 open Elmish
 open Bolero
@@ -154,9 +155,13 @@ type CollectionTemplate = Template<"collection.html">
 type ViewItem() =
     inherit ElmishComponent<int * string, Message>()
 
+    let inputRef = HtmlRef()
+
     override this.View ((k, v)) dispatch =
         CollectionTemplate.Item()
             .Value(v)
+            .InputRef(inputRef)
+            .Focus(fun _ -> inputRef.Value.Value.FocusAsync() |> ignore)
             .SetKey(fun _ -> dispatch (SetKeyOf k))
             .Remove(fun _ -> dispatch (RemoveItem k))
             .Url(router.Link (Item k))
