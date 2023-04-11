@@ -29,16 +29,6 @@ open Bolero.Templating
 let EventHandlerOf (argType: Type) : Type =
     typedefof<Action<_>>.MakeGenericType([|argType|])
 
-/// Get the .NET type corresponding to a hole type.
-let TypeOf (holeType: Parsing.HoleType) : Type =
-    match holeType with
-    | Parsing.String -> typeof<string>
-    | Parsing.Html -> typeof<Node>
-    | Parsing.Event argType -> EventHandlerOf argType
-    | Parsing.DataBinding _ -> typeof<obj * Action<ChangeEventArgs>>
-    | Parsing.Attribute -> typeof<Attr>
-    | Parsing.AttributeValue -> typeof<obj>
-
 let WrapExpr (innerType: Parsing.HoleType) (outerType: Parsing.HoleType) (expr: obj) : option<obj> =
     let inline bindValueOf (e: obj) = fst (e :?> obj * Action<ChangeEventArgs>)
     if innerType = outerType then None else
@@ -74,7 +64,7 @@ let rec ConvertAttrTextPart (vars: Map<string, obj>) (text: Parsing.Expr) : stri
         vars[varName].ToString()
     | Parsing.WrapVars (subst, text) ->
         WrapAndConvert vars subst ConvertAttrTextPart text
-    | Parsing.Fst _ | Parsing.Snd _ | Parsing.Attr _ | Parsing.Elt _ ->
+    | Parsing.Fst _ | Parsing.Snd _ | Parsing.Attr _ | Parsing.Elt _ | Parsing.HtmlRef _ ->
         failwithf "Invalid text: %A" text
 
 let rec ConvertAttrValue (vars: Map<string, obj>) (text: Parsing.Expr) : obj =
@@ -91,7 +81,7 @@ let rec ConvertAttrValue (vars: Map<string, obj>) (text: Parsing.Expr) : obj =
         FSharp.Reflection.FSharpValue.GetTupleField(vars[varName], 1)
     | Parsing.WrapVars (subst, text) ->
         WrapAndConvert vars subst ConvertAttrValue text
-    | Parsing.Attr _ | Parsing.Elt _ ->
+    | Parsing.Attr _ | Parsing.Elt _ | Parsing.HtmlRef _ ->
         failwithf "Invalid attr value: %A" text
 
 let rec ConvertAttr (vars: Map<string, obj>) (attr: Parsing.Expr) : Attr =
@@ -104,6 +94,8 @@ let rec ConvertAttr (vars: Map<string, obj>) (attr: Parsing.Expr) : Attr =
         vars[varName] :?> Attr
     | Parsing.WrapVars (subst, attr) ->
         WrapAndConvert vars subst ConvertAttr attr
+    | Parsing.HtmlRef varName ->
+        TemplatingInternals.Ref.MakeAttr (vars[varName] :?> HtmlRef)
     | Parsing.Fst _ | Parsing.Snd _ | Parsing.PlainHtml _ | Parsing.Elt _ ->
         failwithf "Invalid attribute: %A" attr
 
@@ -119,5 +111,5 @@ let rec ConvertNode (vars: Map<string, obj>) (node: Parsing.Expr) : Node =
         vars[varName] :?> Node
     | Parsing.WrapVars (subst, node) ->
         WrapAndConvert vars subst ConvertNode node
-    | Parsing.Fst _ | Parsing.Snd _ | Parsing.Attr _ ->
+    | Parsing.Fst _ | Parsing.Snd _ | Parsing.Attr _ | Parsing.HtmlRef _ ->
         failwithf "Invalid node: %A" node

@@ -152,7 +152,7 @@ module Program =
                     | client -> client
                 client.SetOnChange(comp.Rerender)
                 init comp)
-            id id id id
+            id id id id id
 
     [<Obsolete "Use withHotReload instead">]
     let inline withHotReloading program =
