@@ -4,15 +4,15 @@ LOWEST_MATCHING: TRUE
 RESTRICTION: || (== net6.0) (== net7.0)
 NUGET
   remote: https://api.nuget.org/v3/index.json
-    Bolero (0.22.42)
-      Elmish (>= 4.0 < 5.0)
+    Bolero (0.22.43)
+      Elmish (>= 4.0.1 < 5.0)
       FSharp.Core (>= 6.0)
       FSharp.SystemTextJson (>= 0.19.13)
       Microsoft.AspNetCore.Components.WebAssembly (>= 7.0) - restriction: || (&& (== net6.0) (>= net7.0)) (== net7.0)
       Microsoft.AspNetCore.Components.WebAssembly (>= 6.0 < 7.0) - restriction: == net6.0
       Microsoft.Extensions.Http (>= 6.0)
-    Bolero.Server (0.22.42)
-      Bolero (0.22.42)
+    Bolero.Server (0.22.43)
+      Bolero (0.22.43)
       FSharp.Core (>= 6.0)
       FSharp.SystemTextJson (>= 0.19.13)
     Elmish (4.0.1)
@@ -132,6 +132,6 @@ NUGET
     System.Threading.Channels (6.0)
 GITHUB
   remote: fsbolero/bolero
-    .build/Utility.fs (45e5509f22e8f75e6a051083303514a6dd49d251)
-    src/Bolero.Templating.Provider/Parsing.fs (45e5509f22e8f75e6a051083303514a6dd49d251)
-    src/Bolero.Templating.Provider/Path.fs (45e5509f22e8f75e6a051083303514a6dd49d251)
+    .build/Utility.fs (9d035bca174ddee6fe67c9b3659ce955b34e246f)
+    src/Bolero.Templating.Provider/Parsing.fs (9d035bca174ddee6fe67c9b3659ce955b34e246f)
+    src/Bolero.Templating.Provider/Path.fs (9d035bca174ddee6fe67c9b3659ce955b34e246f)

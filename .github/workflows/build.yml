@@ -38,7 +38,7 @@ jobs:
           dotnet paket install
           DOTNET_RUNTIME_IDENTIFIER=linux-x64 dotnet build -c:release
           # Package
-          dotnet paket pack ./build --version "$(dotnet nbgv get-version -v SemVer2)"
+          dotnet paket pack ./build --version "$(dotnet nbgv get-version -v SemVer2)" --minimum-from-lock-file
 
       - name: Upload nupkg
         uses: actions/upload-artifact@v1
