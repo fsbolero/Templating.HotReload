@@ -24,6 +24,7 @@ open System.Collections.Concurrent
 open System.IO
 open System.Threading.Tasks
 open System.Runtime.CompilerServices
+open System.Runtime.InteropServices
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Routing
 open Microsoft.AspNetCore.SignalR
@@ -178,27 +179,38 @@ module Impl =
                 for handler in handlers do
                     handler.Dispose()
 
-[<Extension>]
-type ServerTemplatingExtensions =
+[<AutoOpen>]
+module private Constants =
+
+    let [<Literal>] DefaultTemplateDir = "."
+    let [<Literal>] DefaultDelay = 100.
+
+
+[<Extension; AbstractClass; Sealed>]
+type ServerTemplatingExtensions() =
 
     [<Extension>]
-    static member AddHotReload(this: IServiceCollection, configure: WatcherConfig -> WatcherConfig) : IServiceCollection =
+    static member AddHotReload(this: IServiceCollection, configure: Func<WatcherConfig, WatcherConfig>) : IServiceCollection =
         this.AddSignalR().AddJsonProtocol() |> ignore
-        let config = configure { Directory = "."; Delay = TimeSpan.FromMilliseconds 100. }
+        let config = configure.Invoke { Directory = DefaultTemplateDir; Delay = TimeSpan.FromMilliseconds DefaultDelay }
         this.AddSingleton(config)
             .AddSingleton<Watcher>()
             .AddTransient<IClient, Client>()
 
     [<Extension>]
-    static member AddHotReload(this: IServiceCollection, ?templateDir: string, ?delay: TimeSpan) : IServiceCollection =
+    static member AddHotReload(
+        this: IServiceCollection,
+        [<Optional; DefaultParameterValue(DefaultTemplateDir)>] templateDir: string,
+        [<Optional; TimeSpanConstantAttribute(DefaultDelay)>] delay: TimeSpan)
+        : IServiceCollection =
         ServerTemplatingExtensions.AddHotReload(this, fun config ->
             {
-                Directory = defaultArg templateDir config.Directory
-                Delay = defaultArg delay config.Delay
+                Directory = templateDir
+                Delay = delay
             })
 
     [<Extension>]
-    static member UseHotReload(this: IEndpointRouteBuilder, ?urlPath: string) : unit =
+    static member UseHotReload(this: IEndpointRouteBuilder, [<Optional; DefaultParameterValue(HotReloadConstants.DefaultUrl)>] urlPath: string) : unit =
         this.ServiceProvider.GetService<Watcher>().Start()
-        let urlPath = defaultArg urlPath HotReloadSettings.Default.Url
+        let urlPath = urlPath
         this.MapHub<HotReloadHub>(urlPath) |> ignore
