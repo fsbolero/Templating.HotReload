@@ -42,7 +42,7 @@ type ClientBase() =
     let cache = ConcurrentDictionary<string, CacheEntry>()
 
     member this.StoreFileContent(filename, content) =
-        cache[filename] <- Received (Parsing.ParseFileOrContent content "")
+        cache[filename] <- Received (Parsing.ParseFileOrContent content "" false)
 
     member this.RefreshAllFiles() =
         cache
