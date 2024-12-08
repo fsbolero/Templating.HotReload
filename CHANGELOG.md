@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.24
+
+* Fix hot-reloading with Scoped CSS.
+
 ## 0.20
 
 * Update to .NET 6.
