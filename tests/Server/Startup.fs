@@ -40,7 +40,7 @@ module Page =
             ``base`` { attr.href "/" }
         }
         body {
-            div { attr.id "main"; rootComp<Bolero.Test.Client.Main.MyApp> }
+            div { attr.id "main"; comp<Bolero.Test.Client.Main.MyApp> }
             boleroScript
         }
     }
