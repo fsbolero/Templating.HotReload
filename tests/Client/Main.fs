@@ -178,7 +178,7 @@ let viewCollection model dispatch =
         .AddKey(fun _ -> dispatch AddKey)
         .RevOrder(model.revOrder, fun rev -> dispatch (SetRevOrder rev))
         .Items(forEach items <| fun (KeyValue(k, v)) ->
-            ecomp<ViewItem,_,_> (k, v) dispatch { attr.empty() })
+            comp<ViewItem,_,_> (k, v) dispatch { attr.empty() })
         .Elt()
 
 type ViewItemPage() =
@@ -205,7 +205,7 @@ let view js model dispatch =
         cond model.page <| function
             | Form -> viewForm js model dispatch
             | Collection -> viewCollection model dispatch
-            | Item k -> ecomp<ViewItemPage,_,_> (k, model.items[k]) dispatch { attr.empty() }
+            | Item k -> comp<ViewItemPage,_,_> (k, model.items[k]) dispatch { attr.empty() }
     }
 
 type MyApp() =
