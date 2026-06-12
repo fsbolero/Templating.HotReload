@@ -90,7 +90,9 @@ type SignalRClient(settings: HotReloadSettings, nav: NavigationManager, logger: 
     let mutable rerender = ignore
 
     let setupHandlers() =
-        hub.On("FileChanged", fun filename content ->
+        // SignalR 10.0 added an On<'T1,'T2,'TResult> overload alongside On<'T1,'T2>(Func<_,_,Task>),
+        // so the handler call is ambiguous by arity in F#. Pin the 2-arg type parameters explicitly.
+        HubConnectionExtensions.On<string, string>(hub, "FileChanged", fun filename content ->
             this.StoreFileContent(filename, content)
             rerender()
             Task.CompletedTask)
