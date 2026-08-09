@@ -6,13 +6,15 @@
       "version": "3.6.133",
       "commands": [
         "nbgv"
-      ]
+      ],
+      "rollForward": false
     },
     "paket": {
-      "version": "8.0.0",
+      "version": "8.0.3",
       "commands": [
         "paket"
-      ]
+      ],
+      "rollForward": false
     }
   }
 }
