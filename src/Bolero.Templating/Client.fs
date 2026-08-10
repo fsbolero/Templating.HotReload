@@ -90,7 +90,7 @@ type SignalRClient(settings: HotReloadSettings, nav: NavigationManager, logger: 
     let mutable rerender = ignore
 
     let setupHandlers() =
-        hub.On("FileChanged", fun filename content ->
+        hub.On<_, _>("FileChanged", fun filename content ->
             this.StoreFileContent(filename, content)
             rerender()
             Task.CompletedTask)
