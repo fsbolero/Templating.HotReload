@@ -7,11 +7,14 @@ strategy: min
 
 # Project references
 nuget FSharp.Core >= 8.0
-nuget Bolero >= 0.24.38
-nuget Bolero.Server >= 0.24.38
+nuget Bolero >= 0.25.62
+nuget Bolero.Server >= 0.25.62
+nuget Microsoft.Extensions.Configuration.Abstractions >= 10.0.11
+nuget Microsoft.Extensions.Configuration.Binder >= 10.0.11
 nuget Microsoft.AspNetCore.Components.WebAssembly.Server >= 8.0
 nuget Microsoft.AspNetCore.SignalR.Client >= 8.0
 nuget HtmlAgilityPack >= 1.11.39
+nuget System.Text.Encodings.Web >= 10.0
 
 # Build and test references
 github fsbolero/bolero src/Bolero.Templating.Provider/Path.fs

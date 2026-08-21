@@ -167,7 +167,7 @@ type ViewItem() =
             .Url(router.Link (Item k))
             .Elt()
 
-let viewCollection model dispatch =
+let viewCollection model (dispatch: Message -> unit) =
     let items =
         if model.revOrder then
             Seq.rev model.items

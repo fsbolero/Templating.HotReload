@@ -21,6 +21,7 @@
 module Bolero.Templating.Client.ConvertExpr
 
 open System
+open System.Reflection
 open Microsoft.AspNetCore.Components
 open Bolero
 open Bolero.Templating
@@ -64,7 +65,7 @@ let rec ConvertAttrTextPart (vars: Map<string, obj>) (text: Parsing.Expr) : stri
         vars[varName].ToString()
     | Parsing.WrapVars (subst, text) ->
         WrapAndConvert vars subst ConvertAttrTextPart text
-    | Parsing.Fst _ | Parsing.Snd _ | Parsing.Attr _ | Parsing.Elt _ | Parsing.HtmlRef _ ->
+    | Parsing.Fst _ | Parsing.Snd _ | Parsing.EventHandler _ | Parsing.Attr _ | Parsing.Elt _ | Parsing.HtmlRef _ ->
         failwithf "Invalid text: %A" text
 
 let rec ConvertAttrValue (vars: Map<string, obj>) (text: Parsing.Expr) : obj =
@@ -81,7 +82,7 @@ let rec ConvertAttrValue (vars: Map<string, obj>) (text: Parsing.Expr) : obj =
         FSharp.Reflection.FSharpValue.GetTupleField(vars[varName], 1)
     | Parsing.WrapVars (subst, text) ->
         WrapAndConvert vars subst ConvertAttrValue text
-    | Parsing.Attr _ | Parsing.Elt _ | Parsing.HtmlRef _ ->
+    | Parsing.EventHandler _ | Parsing.Attr _ | Parsing.Elt _ | Parsing.HtmlRef _ ->
         failwithf "Invalid attr value: %A" text
 
 let rec ConvertAttr (vars: Map<string, obj>) (attr: Parsing.Expr) : Attr =
@@ -90,6 +91,14 @@ let rec ConvertAttr (vars: Map<string, obj>) (attr: Parsing.Expr) : Attr =
         Attr.Attrs (List.map (ConvertAttr vars) attrs)
     | Parsing.Attr (name, value) ->
         Attr.Make name (ConvertAttrValue vars value)
+    | Parsing.EventHandler(name, value, argType) ->
+        let value = ConvertAttrValue vars value
+        typeof<Attr>.Assembly
+            .GetType("Bolero.AttrModule")
+            .GetMethod("MakeWithReceiver", BindingFlags.Static ||| BindingFlags.Public)
+            .MakeGenericMethod(typedefof<EventCallback<_>>.MakeGenericType(argType))
+            .Invoke(null, [| name; value |])
+        :?> _
     | Parsing.VarContent varName ->
         vars[varName] :?> Attr
     | Parsing.WrapVars (subst, attr) ->
@@ -111,5 +120,5 @@ let rec ConvertNode (vars: Map<string, obj>) (node: Parsing.Expr) : Node =
         vars[varName] :?> Node
     | Parsing.WrapVars (subst, node) ->
         WrapAndConvert vars subst ConvertNode node
-    | Parsing.Fst _ | Parsing.Snd _ | Parsing.Attr _ | Parsing.HtmlRef _ ->
+    | Parsing.Fst _ | Parsing.Snd _ | Parsing.Attr _ | Parsing.EventHandler _ | Parsing.HtmlRef _ ->
         failwithf "Invalid node: %A" node
