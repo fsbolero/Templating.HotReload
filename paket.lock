@@ -4,7 +4,7 @@ LOWEST_MATCHING: TRUE
 RESTRICTION: == net8.0
 NUGET
   remote: https://api.nuget.org/v3/index.json
-    Bolero (0.25.62)
+    Bolero (0.25.63)
       Elmish (>= 4.0.1 < 5.0)
       FSharp.Core (>= 8.0)
       FSharp.SystemTextJson (>= 0.19.13)
@@ -12,8 +12,8 @@ NUGET
       Microsoft.AspNetCore.Components.WebAssembly (>= 8.0 < 9.0)
       Microsoft.Extensions.Http (>= 10.0)
       Microsoft.JSInterop.WebAssembly (>= 8.0 < 9.0)
-    Bolero.Server (0.25.62)
-      Bolero (0.25.62)
+    Bolero.Server (0.25.63)
+      Bolero (0.25.63)
       FSharp.Core (>= 8.0)
       FSharp.SystemTextJson (>= 0.19.13)
       Microsoft.AspNetCore.Components.Web (>= 8.0 < 9.0)
