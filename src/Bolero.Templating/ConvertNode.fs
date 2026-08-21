@@ -31,7 +31,7 @@ let EventHandlerOf (argType: Type) : Type =
     typedefof<Action<_>>.MakeGenericType([|argType|])
 
 let WrapExpr (innerType: Parsing.HoleType) (outerType: Parsing.HoleType) (expr: obj) : option<obj> =
-    let inline bindValueOf (e: obj) = fst (e :?> obj * Action<ChangeEventArgs>)
+    let inline bindValueOf (e: obj) = fst (e :?> obj * (obj -> EventCallback<ChangeEventArgs>))
     if innerType = outerType then None else
     match innerType, outerType with
     | Parsing.Html, Parsing.String ->
