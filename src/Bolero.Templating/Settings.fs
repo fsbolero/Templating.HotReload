@@ -20,6 +20,12 @@
 
 namespace Bolero.Templating
 
+[<RequireQualifiedAccess>]
+module HotReloadConstants =
+
+    let [<Literal>] DefaultUrl = "/bolero-reload"
+    let [<Literal>] DefaultReconnectDelay = 5000
+
 type HotReloadSettings =
     {
         Url: string
@@ -28,6 +34,6 @@ type HotReloadSettings =
 
     static member Default =
         {
-            Url = "/bolero-reload"
-            ReconnectDelayInMs = 5000
+            Url = HotReloadConstants.DefaultUrl
+            ReconnectDelayInMs = HotReloadConstants.DefaultReconnectDelay
         }
